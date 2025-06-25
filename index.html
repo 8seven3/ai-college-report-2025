@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College AI in 2025: Student Use of Writing AI & AI Assistants</title>
+    <meta name="description" content="An in-depth 2025 report on how college students use AI. Explore data on Writing AI, Paper AI, and the role of the AI assistant in higher education.">
+    <meta name="keywords" content="Writing AI, Paper AI, AI Assistant, College AI, AI in Education, Student AI Usage, Generative AI, Higher Education">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chosen Palette: Warm Neutral Harmony -->
+    <!-- Application Structure Plan: A thematic, multi-perspective dashboard. The structure is designed to guide the user from a high-level overview ('The Big Picture') into deeper dives on specific stakeholders ('The Student Experience', 'The Institutional Response') and concluding with actionable takeaways ('The Path Forward'). This non-linear, tab-based navigation was chosen over a simple scroll to allow users to directly access the information most relevant to them, enhancing usability and engagement. Key conflicts and data points are highlighted in dedicated interactive modules to make the report's core arguments more impactful and memorable. -->
+    <!-- Visualization & Content Choices: 
+         - Student Adoption Trend: Report Info -> Table 1 data on adoption over time. Goal -> Show change. Viz -> Line Chart (Chart.js). Interaction -> Hover for details. Justification -> Best for time-series data.
+         - Student AI Use Cases: Report Info -> Chart 1 data on applications. Goal -> Compare categories. Viz -> Horizontal Bar Chart (Chart.js). Interaction -> Click bar to update text block with motivations. Justification -> Connects quantitative 'what' with qualitative 'why'.
+         - Institutional Policy Status: Report Info -> Chart 2 data on policy status. Goal -> Show proportions. Viz -> Donut Chart (Chart.js). Interaction -> Click segment for implications. Justification -> Clear part-to-whole visualization.
+         - Faculty/Admin Disconnect: Report Info -> Textual data on perception gap. Goal -> Compare groups. Viz -> Grouped Bar Chart (Chart.js). Justification -> Direct visual comparison of sentiment.
+         - Conceptual Frameworks (Cheating Paradox, AI Trust Matrix): Report Info -> Key stats and conceptual text. Goal -> Organize/Inform. Viz -> Styled HTML/Tailwind Grids. Interaction -> Hover effects. Justification -> More impactful and clearer for conceptual ideas than a data chart.
+         - Recommendations/Outlook: Report Info -> Textual recommendations. Goal -> Organize/Inform. Viz -> Collapsible Accordion (HTML/JS). Justification -> Reduces information overload, improves scannability.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F4;
+            color: #333333;
+        }
+        .nav-button {
+            transition: all 0.3s ease;
+        }
+        .nav-button.active {
+            color: #1a512e;
+            border-bottom-color: #4A7C59;
+            font-weight: 600;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 40vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .stat-card {
+            background-color: #FFFFFF;
+            border: 1px solid #EAE7E1;
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .accordion-button.active + .accordion-content {
+            max-height: 500px;
+        }
+        .prose-styles {
+            line-height: 1.7;
+        }
+        .prose-styles h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .prose-styles p {
+            margin-bottom: 1.25rem;
+        }
+        .prose-styles a {
+            color: #1a512e;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="min-h-screen container mx-auto px-4 py-8 md:py-12">
+        <header class="text-center mb-8 md:mb-12">
+            <h1 class="text-3xl md:text-5xl font-bold text-gray-800">The College AI Revolution in 2025</h1>
+            <p class="mt-2 md:mt-4 text-lg md:text-xl text-gray-600 max-w-4xl mx-auto">An interactive analysis of how students use a Writing AI, Paper AI, and AI Assistant tools.</p>
+        </header>
+
+        <nav class="flex justify-center border-b-2 border-gray-200 mb-8">
+            <button class="nav-button active text-gray-500 border-b-2 border-transparent px-4 py-3 text-sm md:text-base" data-target="overview">The Big Picture</button>
+            <button class="nav-button text-gray-500 border-b-2 border-transparent px-4 py-3 text-sm md:text-base" data-target="student">The Student Experience</button>
+            <button class="nav-button text-gray-500 border-b-2 border-transparent px-4 py-3 text-sm md:text-base" data-target="institution">The Institutional Response</button>
+            <button class="nav-button text-gray-500 border-b-2 border-transparent px-4 py-3 text-sm md:text-base" data-target="forward">The Path Forward</button>
+        </nav>
+
+        <main>
+            <!-- Section 1: The Big Picture -->
+            <section id="overview" class="content-section active">
+                <div class="text-center mb-12">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-2">A New Reality: College AI on Campus</h2>
+                    <p class="max-w-3xl mx-auto text-gray-600 prose-styles">The year 2025 marks a definitive inflection point. Generative AI is no longer an emerging technology; it is a foundational, student-led movement reshaping higher education. From late-night study sessions to final paper submissions, a dedicated **AI assistant** has become an indispensable, if controversial, partner in the academic journey. This overview captures the sheer scale of this new **College AI** reality, highlighting the velocity of its adoption and the central tensions it creates between student practice and institutional policy.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                    <div class="stat-card p-6 rounded-xl text-center">
+                        <div class="text-5xl font-bold text-[#4A7C59]">86%</div>
+                        <p class="mt-2 font-semibold">Student Adoption Rate</p>
+                        <p class="text-sm text-gray-500 mt-1">of U.S. college students now use AI in their studies.</p>
+                    </div>
+                    <div class="stat-card p-6 rounded-xl text-center">
+                        <div class="text-5xl font-bold text-[#4A7C59]">42%</div>
+                        <p class="mt-2 font-semibold">Frequent Engagement</p>
+                        <p class="text-sm text-gray-500 mt-1">use an AI assistant weekly or daily, deepening its integration.</p>
+                    </div>
+                    <div class="stat-card p-6 rounded-xl text-center">
+                        <div class="text-5xl font-bold text-[#b33e3e]">72%</div>
+                        <p class="mt-2 font-semibold">Institutional Policy Gap</p>
+                        <p class="text-sm text-gray-500 mt-1">of institutions lack a formal, active AI policy.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 md:p-8 rounded-xl border border-gray-200 prose-styles">
+                    <h3>The Widening Chasm</h3>
+                    <p>These three statistics paint a stark picture: a student body that has sprinted ahead with technology, and institutions struggling to keep pace. For nearly half the student population, a **College AI** tool is not for occasional help but a core component of their weekly academic workflow. This grassroots adoption of tools, from a general **AI assistant** to a specialized **Writing AI**, stands in dramatic contrast to the 72% of institutions operating in a policy vacuum. This lag creates a "wild west" environment on campus, leaving students and faculty to navigate complex ethical questions without a map and represents a missed opportunity to guide the integration of a technology that will define the future of knowledge work.</p>
+                </div>
+
+                <div class="bg-white p-6 md:p-8 rounded-xl border border-gray-200 mt-8">
+                    <h3 class="text-xl font-bold text-center mb-1">The Explosive Growth of AI Adoption</h3>
+                    <p class="text-center text-gray-600 mb-4 text-sm">Student use of AI for academic work has accelerated dramatically from 2023 to 2025.</p>
+                    <div class="chart-container">
+                        <canvas id="adoptionTrendChart"></canvas>
+                    </div>
+                     <div class="prose-styles mt-6">
+                        <p>The trajectory shown is less a curve and more a cliff face. The initial wave in early 2023, driven by public curiosity, quickly gave way to pragmatic, widespread adoption. By 2025, what began as a tech trend has solidified into an academic norm, fundamentally altering student expectations for how they learn, research, and create with their personal **AI assistant**.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: The Student Experience -->
+            <section id="student" class="content-section">
+                <div class="text-center mb-12">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-2">The Student Playbook: From Paper AI to Study Buddy</h2>
+                    <p class="max-w-3xl mx-auto text-gray-600 prose-styles">To understand the **College AI** shift, we must look into the nuanced ways students use these tools. They are active, strategic users, deploying a versatile **AI assistant** to augment weaknesses, accelerate strengths, and navigate the pressures of modern academic life. Use cases range from employing a **Writing AI** for editing to using a **Paper AI** for research brainstorming.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-white p-6 rounded-xl border border-gray-200">
+                        <h3 class="text-xl font-bold text-center mb-4">How Students Use AI Tools</h3>
+                        <div class="chart-container h-[450px] max-h-[50vh]">
+                            <canvas id="useCaseChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-gray-200 flex flex-col justify-center">
+                        <h3 class="text-xl font-bold text-center mb-4">Why They Use an AI Assistant</h3>
+                        <div id="useCaseDetails" class="space-y-4 text-center">
+                             <p class="text-lg font-semibold text-[#4A7C59]">Click on a bar to the left to explore the motivation.</p>
+                             <p class="text-gray-600">Student motivations range from practical needs like managing heavy workloads to pedagogical ones like filling gaps in classroom instruction. Their chosen **AI assistant** often serves as a 24/7 personal tutor.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 md:p-8 rounded-xl border border-gray-200 prose-styles mb-12">
+                    <h3>A Tool for Every Task: The Rise of the Writing AI</h3>
+                    <p>The chart reveals a student body using **College AI** as a Swiss Army knife. <b>Solving Problems (69%)</b> is a leading use case, with students turning to an **AI assistant** as an on-demand tutor. Close behind, <b>Proofreading & Editing (67%)</b> shows a massive adoption of the **Writing AI**. Students leverage it to refine their work, improve sentence flow, and ensure clarity. This is less about generating content and more about refining it—a distinction many students feel is ethical.</p>
+                    <p>Likewise, <b>Summarizing Content (61%)</b> is a key efficiency strategy. Faced with dense articles, a **Paper AI** can extract core arguments, allowing students to focus their deep-reading time. Finally, <b>Brainstorming (55%)</b> highlights the **AI assistant**'s role at the start of the creative process. A good **Paper AI** is invaluable for generating research questions and building momentum on daunting assignments.</p>
+                </div>
+
+                <div class="bg-white p-6 md:p-8 rounded-xl border border-gray-200">
+                    <h3 class="text-xl font-bold text-center mb-4">The Campus Cognitive Dissonance</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-center">
+                        <div class="bg-amber-50 p-6 rounded-lg border border-amber-200">
+                            <h4 class="font-bold text-lg text-amber-800">The "Cheating Paradox"</h4>
+                            <p class="mt-2 text-gray-700">A profound conflict exists between student beliefs and actions, fueled by institutional silence.</p>
+                            <div class="flex justify-around items-center mt-4">
+                                <div>
+                                    <p class="text-4xl font-bold text-amber-700">54%</p>
+                                    <p class="text-sm">Believe using a **Paper AI** is cheating.</p>
+                                </div>
+                                <div>
+                                    <p class="text-4xl font-bold text-amber-700">56%</p>
+                                    <p class="text-sm">Admit to using one on assignments.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-sky-50 p-6 rounded-lg border border-sky-200">
+                            <h4 class="font-bold text-lg text-sky-800">The Trust Deficit</h4>
+                            <p class="mt-2 text-gray-700">Despite high usage, students harbor significant concerns about their **AI assistant**.</p>
+                             <ul class="text-left mt-4 space-y-2 text-gray-600 text-sm list-disc list-inside">
+                                 <li><strong>Accuracy & Misinformation:</strong> 64% worry about the reliability of their chosen **College AI**.</li>
+                                 <li><strong>Data Privacy:</strong> Students are anxious about how their data and prompts are used.</li>
+                                 <li><strong>Skill Degradation:</strong> Over half worry that over-reliance on a **Writing AI** will harm their own skills.</li>
+                             </ul>
+                        </div>
+                    </div>
+                     <div class="prose-styles mt-6">
+                        <p>The "Cheating Paradox" data is telling. Students draw sophisticated ethical lines: using a **Paper AI** to generate an entire essay is wrong, but using a **Writing AI** to clean up grammar is seen as a legitimate tool. The problem is that these nuanced distinctions rarely align with vague university policies, forcing students into a state of ethical ambiguity.</p>
+                        <p>Simultaneously, the "Trust Deficit" shows that high usage does not equal blind faith. Students are acutely aware of their **AI assistant**'s pitfalls. This reveals a critical user base—one that is hungry for guidance on how to mitigate risks while still reaping the benefits.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: The Institutional Response -->
+            <section id="institution" class="content-section">
+                <div class="text-center mb-12">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-2">A Landscape of Lag and Disconnection</h2>
+                    <p class="max-w-3xl mx-auto text-gray-600 prose-styles">The institutional response to the student-led **College AI** revolution has been slow. This has created a policy vacuum, sown confusion, and led to a significant divergence in perception between administrators, faculty, and the students who use tools like a **Writing AI** every day.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-white p-6 rounded-xl border border-gray-200">
+                        <h3 class="text-xl font-bold text-center mb-4">Institutional AI Policy Status (2025)</h3>
+                         <div class="chart-container h-[350px]">
+                            <canvas id="policyStatusChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-gray-200">
+                        <h3 class="text-xl font-bold text-center mb-4">The Faculty-Administrator Disconnect</h3>
+                         <div class="chart-container h-[350px]">
+                            <canvas id="perceptionGapChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                 <div class="bg-white p-6 md:p-8 rounded-xl border border-gray-200 prose-styles mb-12">
+                     <h3>Policy Paralysis and Perception Gaps</h3>
+                     <p>The donut chart starkly illustrates the policy crisis regarding **College AI**. With 72% of colleges operating without clear guidelines, faculty are left to create ad-hoc rules about **Writing AI** and **Paper AI** usage, resulting in a confusing patchwork of policies.</p>
+                     <p>Compounding this is the perception gap. While 78% of administrators see the potential of a campus-wide **AI assistant**, only 46% of faculty agree. Faculty are on the front lines, bearing the burden of redesigning curriculum to account for a world with a ubiquitous **Paper AI**.</p>
+                </div>
+                
+                 <div class="bg-white p-6 md:p-8 rounded-xl border border-gray-200">
+                    <h3 class="text-xl font-bold text-center mb-4">Contradictions on the Ground</h3>
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                         <div class="p-4 rounded-lg bg-red-50 border border-red-200">
+                             <h4 class="font-bold text-red-800">The Workload Contradiction</h4>
+                             <p class="mt-2 text-gray-700">While AI promises efficiency, <strong>38% of faculty</strong> report their **AI assistant** is actually <span class="font-bold">creating more work</span>, largely due to policing for cheating and redesigning assignments.</p>
+                         </div>
+                         <div class="p-4 rounded-lg bg-blue-50 border border-blue-200">
+                             <h4 class="font-bold text-blue-800">The Help-Seeking Misperception</h4>
+                             <p class="mt-2 text-gray-700"><strong>84% of students</strong> turn to people first for help. Yet, <strong>29% of instructors</strong> believe students turn to their **AI assistant** first, revealing a breakdown in trust.</p>
+                         </div>
+                     </div>
+                      <div class="prose-styles mt-6">
+                        <p>These realities underscore the disconnect. For many instructors, the promise of AI efficiency has morphed into the burden of policing the use of the student **Writing AI**. Perhaps more damaging is the help-seeking misperception. It chills the very communication essential for effective learning in the age of **College AI**.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: The Path Forward -->
+            <section id="forward" class="content-section">
+                 <div class="text-center mb-12">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-2">Recommendations and Future Outlook</h2>
+                    <p class="max-w-3xl mx-auto text-gray-600 prose-styles">Moving forward requires a shift from reactive prohibition to proactive, principled guidance. The goal must be to cultivate **College AI** literacy and redesign institutional practices to harness the potential of the modern **AI assistant** for deeper learning.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-xl border border-gray-200">
+                        <h3 class="text-xl font-bold text-center mb-4">A Roadmap for University Leaders</h3>
+                        <div class="space-y-3" id="accordion-leaders">
+                            <div>
+                                <button class="accordion-button w-full text-left font-semibold p-3 bg-gray-50 rounded-md hover:bg-gray-100 transition flex justify-between items-center">
+                                    <span>1. Guide Use of Writing AI & Paper AI</span>
+                                    <span class="transform transition-transform duration-300">&#9662;</span>
+                                </button>
+                                <div class="accordion-content">
+                                    <p class="p-3 text-gray-600 text-sm">Bans are futile. Institutions must establish principles for ethical **AI assistant** use (e.g., "AI use must be cited"). Empower faculty with adaptable syllabus templates for course-specific rules on tools like a **Writing AI**, addressing the policy vacuum.</p>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="accordion-button w-full text-left font-semibold p-3 bg-gray-50 rounded-md hover:bg-gray-100 transition flex justify-between items-center">
+                                    <span>2. Invest Aggressively in AI Literacy for All</span>
+                                     <span class="transform transition-transform duration-300">&#9662;</span>
+                                </button>
+                                <div class="accordion-content">
+                                    <p class="p-3 text-gray-600 text-sm">Elevate **College AI** literacy to a core competency. This requires investment in student workshops (prompting, verification), faculty training (pedagogical integration of a **Paper AI**), and staff guidance, ensuring equitable workforce preparedness.</p>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="accordion-button w-full text-left font-semibold p-3 bg-gray-50 rounded-md hover:bg-gray-100 transition flex justify-between items-center">
+                                    <span>3. Redesign Assessment to "Aim Higher" than AI</span>
+                                     <span class="transform transition-transform duration-300">&#9662;</span>
+                                </button>
+                                <div class="accordion-content">
+                                    <p class="p-3 text-gray-600 text-sm">Shift assessment away from tasks a **Paper AI** can easily replicate. Focus on uniquely human skills: critical thinking, creative application, and synthesis. Embrace authentic projects where the **AI assistant** is a tool, not the author.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="bg-white p-6 rounded-xl border border-gray-200">
+                        <h3 class="text-xl font-bold text-center mb-4">An Agenda for EdTech Innovators</h3>
+                        <div class="space-y-3" id="accordion-edtech">
+                             <div>
+                                <button class="accordion-button w-full text-left font-semibold p-3 bg-gray-50 rounded-md hover:bg-gray-100 transition flex justify-between items-center">
+                                    <span>1. Design the Ultimate AI Assistant</span>
+                                     <span class="transform transition-transform duration-300">&#9662;</span>
+                                </button>
+                                <div class="accordion-content">
+                                    <p class="p-3 text-gray-600 text-sm">The future is human-AI collaboration. Build a **Writing AI** that assists and augments, not replaces. Prioritize features that facilitate critical evaluation, cite sources transparently, and allow for human correction to build trust.</p>
+                                </div>
+                            </div>
+                             <div>
+                                <button class="accordion-button w-full text-left font-semibold p-3 bg-gray-50 rounded-md hover:bg-gray-100 transition flex justify-between items-center">
+                                    <span>2. Solve the Faculty Workload Problem</span>
+                                     <span class="transform transition-transform duration-300">&#9662;</span>
+                                </button>
+                                <div class="accordion-content">
+                                    <p class="p-3 text-gray-600 text-sm">A massive opportunity exists for a faculty-focused **AI assistant**. Create tools to help design **Paper AI**-resistant assignments, generate rubrics, and provide scalable feedback, freeing instructors for higher-level mentoring.</p>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="accordion-button w-full text-left font-semibold p-3 bg-gray-50 rounded-md hover:bg-gray-100 transition flex justify-between items-center">
+                                    <span>3. Prioritize Trust and Privacy by Design</span>
+                                     <span class="transform transition-transform duration-300">&#9662;</span>
+                                </button>
+                                <div class="accordion-content">
+                                    <p class="p-3 text-gray-600 text-sm">With anxiety around data privacy, trust must be a core feature of any **College AI** tool. The companies that win will offer secure, private, institution-specific environments with clear data governance. Trust is a powerful competitive advantage.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer with Sources -->
+                <footer class="mt-12 pt-8 border-t border-gray-200 prose-styles text-sm text-gray-500">
+                     <h3 class="text-lg font-semibold text-gray-700">Sources & Methodology</h3>
+                     <p>The data and insights in this report were synthesized from leading research institutions and publications covering educational technology and artificial intelligence between 2023 and 2025. Key sources include:</p>
+                     <ul class="list-disc pl-5 space-y-1">
+                        <li>EDUCAUSE. (2024). <em>2024 Students and Technology Report: The Ascendance of AI in Higher Education</em>. <a href="https://www.educause.edu/research-and-publications/research/student-and-faculty-technology-studies" target="_blank" rel="noopener noreferrer">educause.edu</a></li>
+                        <li>Pew Research Center. (2023). <em>Teens and Artificial Intelligence</em>. (Used for foundational understanding). <a href="https://www.pewresearch.org/internet/2023/11/28/teens-and-artificial-intelligence/" target="_blank" rel="noopener noreferrer">pewresearch.org</a></li>
+                        <li>Tyton Partners & The Chronicle of Higher Education. (2024). <em>Time for Class 2024: The State of Student and Faculty Engagement with AI</em>. <a href="https://tytonpartners.com/time-for-class-2024/" target="_blank" rel="noopener noreferrer">tytonpartners.com</a></li>
+                        <li>Statista. (2024). <em>Generative AI Usage in Education in the United States</em>. <a href="https://www.statista.com/topics/11832/generative-ai-in-education-in-the-us/" target="_blank" rel="noopener noreferrer">statista.com</a></li>
+                        <li>BestColleges.com. (2024). <em>Student and Faculty Perspectives on AI in Higher Education</em>. <a href="https://www.bestcolleges.com/research/ai-in-college-statistics/" target="_blank" rel="noopener noreferrer">bestcolleges.com</a></li>
+                     </ul>
+                </footer>
+
+            </section>
+        </main>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            Chart.defaults.font.family = 'Inter, sans-serif';
+
+            const commonChartOptions = {
+                plugins: {
+                    legend: { labels: { color: '#333333' } },
+                    tooltip: {
+                        backgroundColor: '#333333',
+                        titleColor: '#FFFFFF',
+                        bodyColor: '#FFFFFF',
+                        padding: 10,
+                        cornerRadius: 4,
+                        displayColors: false
+                    }
+                },
+                scales: {
+                    x: { ticks: { color: '#666' }, grid: { display: false } },
+                    y: { ticks: { color: '#666' }, grid: { color: '#EAE7E1' } }
+                },
+                maintainAspectRatio: false
+            };
+            
+            const navButtons = document.querySelectorAll('.nav-button');
+            const contentSections = document.querySelectorAll('.content-section');
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.dataset.target;
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    contentSections.forEach(section => {
+                        section.classList.remove('active');
+                        if (section.id === targetId) {
+                            section.classList.add('active');
+                        }
+                    });
+                });
+            });
+            
+            function setupAccordion(containerId) {
+                const accordionContainer = document.getElementById(containerId);
+                if(!accordionContainer) return;
+                const buttons = accordionContainer.querySelectorAll('.accordion-button');
+                buttons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const currentlyActive = accordionContainer.querySelector('.accordion-button.active');
+                        if(currentlyActive && currentlyActive !== button){
+                            currentlyActive.classList.remove('active');
+                            currentlyActive.querySelector('span:last-child').style.transform = 'rotate(0deg)';
+                        }
+                        button.classList.toggle('active');
+                        const icon = button.querySelector('span:last-child');
+                        icon.style.transform = button.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
+                    });
+                });
+            }
+            setupAccordion('accordion-leaders');
+            setupAccordion('accordion-edtech');
+
+            const adoptionTrendCtx = document.getElementById('adoptionTrendChart')?.getContext('2d');
+            if (adoptionTrendCtx) {
+                new Chart(adoptionTrendCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Spring 2023', 'Fall 2023', 'Spring 2024', 'Spring 2025'],
+                        datasets: [{
+                            label: '% of Students Using GenAI for Studies',
+                            data: [30, 49, 82, 86],
+                            borderColor: '#4A7C59',
+                            backgroundColor: 'rgba(74, 124, 89, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: { ...commonChartOptions }
+                });
+            }
+
+            const useCaseCtx = document.getElementById('useCaseChart')?.getContext('2d');
+            const useCaseDetails = document.getElementById('useCaseDetails');
+            const useCaseData = {
+                'Solving Problems': 'Driven by a need for on-demand help, students use their AI assistant as a 24/7 tutor to break down complex topics and work through difficult quantitative problems.',
+                'Proofreading & Editing': 'As a powerful Writing AI, it helps students refine their own work, polishing grammar and style for a more professional final product.',
+                'Summarizing Content': 'To manage heavy reading loads, students leverage a Paper AI to condense dense articles into key takeaways, a crucial efficiency strategy.',
+                'Brainstorming / Ideating': 'The AI assistant serves as an intellectual sparring partner, helping students overcome "blank page" paralysis and explore potential topics or arguments.',
+                'Researching New Topics': 'As a starting point for a paper, an AI assistant helps students get a broad overview of a new topic and identify key concepts for deeper research.'
+            };
+            
+            if (useCaseCtx) {
+                const useCaseChart = new Chart(useCaseCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Solving Problems', 'Proofreading & Editing', 'Summarizing Content', 'Brainstorming / Ideating', 'Researching New Topics'],
+                        datasets: [{
+                            label: '% of Students Reporting Use',
+                            data: [69, 67, 61, 55, 46],
+                            backgroundColor: [
+                                'rgba(74, 124, 89, 0.7)','rgba(74, 124, 89, 0.6)','rgba(74, 124, 89, 0.5)','rgba(74, 124, 89, 0.4)','rgba(74, 124, 89, 0.3)'
+                            ],
+                            borderColor: '#4A7C59',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        ...commonChartOptions,
+                        indexAxis: 'y',
+                        scales: {
+                            x: { ticks: { color: '#666' }, grid: { display: true, color: '#EAE7E1' } },
+                            y: { ticks: { color: '#666' }, grid: { display: false } }
+                        },
+                        onClick: (event, elements) => {
+                            if (elements.length > 0) {
+                                const index = elements[0].index;
+                                const label = useCaseChart.data.labels[index];
+                                const detailText = useCaseData[label];
+                                useCaseDetails.innerHTML = `<p class="text-lg font-semibold text-[#4A7C59]">${label}</p><p class="text-gray-600">${detailText}</p>`;
+                            }
+                        }
+                    }
+                });
+            }
+
+            const policyStatusCtx = document.getElementById('policyStatusChart')?.getContext('2d');
+            if(policyStatusCtx) {
+                new Chart(policyStatusCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Has Formal Policy', 'Developing a Policy', 'No Policy / Unsure'],
+                        datasets: [{
+                            data: [28, 32, 40],
+                            backgroundColor: ['#4A7C59', '#a7c7b1', '#b33e3e'],
+                            hoverOffset: 4
+                        }]
+                    },
+                     options: { ...commonChartOptions, scales: { x: {display: false}, y: {display: false}} }
+                });
+            }
+
+            const perceptionGapCtx = document.getElementById('perceptionGapChart')?.getContext('2d');
+             if(perceptionGapCtx) {
+                new Chart(perceptionGapCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Views AI as Positive for Teaching'],
+                        datasets: [
+                            { label: 'Administrators', data: [78], backgroundColor: '#4A7C59' },
+                            { label: 'Faculty', data: [46], backgroundColor: '#a7c7b1' }
+                        ]
+                    },
+                    options: {
+                         ...commonChartOptions,
+                         scales: {
+                             ...commonChartOptions.scales,
+                             y: {
+                                 beginAtZero: true,
+                                 max: 100,
+                                 ticks: { callback: function(value) { return value + "%" } }
+                             }
+                         }
+                    }
+                });
+            }
+
+        });
+    </script>
+</body>
+</html>
