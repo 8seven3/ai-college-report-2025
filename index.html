@@ -134,6 +134,27 @@
             transform: translateY(15px);
             transition: opacity 0.5s ease, transform 0.5s ease;
         }
+        /* NEW: Bottom Navigation Button */
+        .next-section-nav {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #EAE7E1;
+            text-align: right;
+        }
+        .next-section-button {
+            background-color: #1a512e;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+        }
+        .next-section-button:hover {
+            background-color: #2a8a4d;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -189,6 +210,9 @@
                      <div class="prose-styles mt-6">
                         <p>The trajectory shown is less a curve and more a cliff face. The initial wave in early 2023, driven by public curiosity, quickly gave way to pragmatic, widespread adoption. By 2025, what began as a tech trend has solidified into an academic norm, fundamentally altering student expectations for how they learn, research, and create with their personal AI assistant.</p>
                     </div>
+                </div>
+                <div class="next-section-nav animate-on-scroll">
+                    <a href="#" class="next-section-button" data-next-target="student">Next Section: The Student Experience &rarr;</a>
                 </div>
             </section>
 
@@ -314,7 +338,9 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="next-section-nav animate-on-scroll">
+                    <a href="#" class="next-section-button" data-next-target="institution">Next Section: The Institutional Response &rarr;</a>
+                </div>
             </section>
 
             <section id="institution" class="content-section" role="tabpanel">
@@ -359,6 +385,9 @@
                        <div class="prose-styles mt-6">
                         <p>These realities on the ground underscore the depth of the institutional disconnect. For a large minority of instructors, the administrative promise of AI-driven efficiency has morphed into the pedagogical burden of policing the student Writing AI. This not only increases workload but also shifts the faculty role from mentor to detective. Perhaps more damaging in the long term is the help-seeking misperception. When instructors assume students are defaulting to AI, it can chill the very communication and rapport that is essential for effective teaching and deep learning, particularly in an age where AI can handle surface-level questions, leaving instructors to focus on more complex, critical-thinking guidance.</p>
                     </div>
+                </div>
+                <div class="next-section-nav animate-on-scroll">
+                    <a href="#" class="next-section-button" data-next-target="forward">Next Section: Recommendations &rarr;</a>
                 </div>
             </section>
 
@@ -477,8 +506,15 @@
             const contentSections = document.querySelectorAll('.content-section');
             navButtons.forEach(button => {
                 button.addEventListener('click', () => {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
                     const targetId = button.dataset.target;
+                    
+                    const targetSection = document.getElementById(targetId);
+                    const currentActiveSection = document.querySelector('.content-section.active');
+
+                    if (currentActiveSection !== targetSection) {
+                         window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                    
                     navButtons.forEach(btn => {
                         btn.classList.remove('active');
                         btn.setAttribute('aria-selected', 'false');
@@ -690,6 +726,19 @@
                     });
                 });
             }
+
+            // --- Bottom Navigation Logic ---
+            document.querySelectorAll('.next-section-button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const nextTargetId = e.currentTarget.dataset.nextTarget;
+                    const nextTabButton = document.querySelector(`.nav-button[data-target="${nextTargetId}"]`);
+                    if (nextTabButton) {
+                        nextTabButton.click();
+                    }
+                });
+            });
+
         });
     </script>
 </body>
