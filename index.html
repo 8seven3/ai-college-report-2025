@@ -13,18 +13,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Chosen Palette: Warm Neutral Harmony -->
-    <!-- Application Structure Plan: A thematic, multi-perspective dashboard. The structure is designed to guide the user from a high-level overview ('The Big Picture') into deeper dives on specific stakeholders ('The Student Experience', 'The Institutional Response') and concluding with actionable takeaways ('The Path Forward'). This non-linear, tab-based navigation was chosen over a simple scroll to allow users to directly access the information most relevant to them, enhancing usability and engagement. Key conflicts and data points are highlighted in dedicated interactive modules to make the report's core arguments more impactful and memorable. -->
-    <!-- Visualization & Content Choices: 
-         - Student Adoption Trend: Report Info -> Table 1 data on adoption over time. Goal -> Show change. Viz -> Line Chart (Chart.js). Interaction -> Hover for details. Justification -> Best for time-series data.
-         - Student AI Use Cases: Report Info -> Chart 1 data on applications. Goal -> Compare categories. Viz -> Horizontal Bar Chart (Chart.js). Interaction -> Click bar to update text block with motivations. Justification -> Connects quantitative 'what' with qualitative 'why'.
-         - Institutional Policy Status: Report Info -> Chart 2 data on policy status. Goal -> Show proportions. Viz -> Donut Chart (Chart.js). Interaction -> Click segment for implications. Justification -> Clear part-to-whole visualization.
-         - Faculty/Admin Disconnect: Report Info -> Textual data on perception gap. Goal -> Compare groups. Viz -> Grouped Bar Chart (Chart.js). Justification -> Direct visual comparison of sentiment.
-         - Conceptual Frameworks (Cheating Paradox, AI Trust Matrix): Report Info -> Key stats and conceptual text. Goal -> Organize/Inform. Viz -> Styled HTML/Tailwind Grids. Interaction -> Hover effects. Justification -> More impactful and clearer for conceptual ideas than a data chart.
-         - Recommendations/Outlook: Report Info -> Textual recommendations. Goal -> Organize/Inform. Viz -> Collapsible Accordion (HTML/JS). Justification -> Reduces information overload, improves scannability.
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -97,6 +85,166 @@
             color: #1a512e;
             text-decoration: underline;
         }
+        .filter-button {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            background-color: #f3f4f6;
+            color: #4b5563;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+            border: 1px solid transparent;
+            white-space: nowrap;
+        }
+        .filter-button:hover {
+            background-color: #e5e7eb;
+        }
+        .filter-button.active {
+            background-color: #eef2ff;
+            color: #4338ca;
+            border-color: #a5b4fc;
+        }
+        /* Styles for Interactive Paradox Section */
+        .scenario-card {
+            background-color: #fff;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #EAE7E1;
+        }
+        .vote-btn {
+            flex-grow: 1;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            border: 1px solid #d1d5db;
+        }
+        .vote-btn:hover {
+            background-color: #f9fafb;
+        }
+        .vote-btn.selected-ethical {
+            background-color: #dcfce7;
+            border-color: #4ade80;
+            color: #166534;
+        }
+        .vote-btn.selected-cheating {
+             background-color: #fee2e2;
+            border-color: #f87171;
+            color: #b91c1c;
+        }
+        .vote-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .results {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .progress-bg {
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            height: 1.25rem;
+            overflow: hidden;
+            width: 100%;
+        }
+        .progress-bar {
+            height: 100%;
+            border-radius: 9999px;
+            transition: width 1s ease-in-out;
+            text-align: right;
+            padding-right: 0.5rem;
+            color: white;
+            font-size: 0.75rem;
+            line-height: 1.25rem;
+        }
+        .progress-ethical { background-color: #22c55e; }
+        .progress-cheating { background-color: #ef4444; }
+        /* Persona Card Styles */
+        .persona-card {
+            background-color: #fff;
+            border: 1px solid #EAE7E1;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .persona-avatar {
+            width: 5rem;
+            height: 5rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            margin: 0 auto;
+        }
+        .persona-quote {
+            font-style: italic;
+            color: #4b5563;
+            border-left: 3px solid #4A7C59;
+            padding-left: 1rem;
+        }
+        .playbook-list {
+            list-style-type: '✓  ';
+            padding-left: 1.25rem;
+            color: #374151;
+        }
+        /* Integrity Spectrum Styles */
+        .spectrum-container {
+            position: relative;
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+            margin-top: 2rem;
+        }
+        .spectrum-bar {
+            height: 1rem;
+            width: 100%;
+            background: linear-gradient(to right, #22c55e, #fde047, #ef4444);
+            border-radius: 9999px;
+        }
+        .spectrum-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            padding: 0 0.5rem;
+        }
+        .spectrum-marker {
+            position: absolute;
+            bottom: 3.5rem;
+            transform: translateX(-50%);
+            cursor: pointer;
+        }
+        .spectrum-marker-dot {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 9999px;
+            border: 3px solid white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .spectrum-marker-info {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #1f2937;
+            color: white;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            width: 240px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 10;
+        }
+        .spectrum-marker:hover .spectrum-marker-info {
+            opacity: 1;
+            visibility: visible;
+        }
+
+
     </style>
 </head>
 <body class="antialiased">
@@ -115,9 +263,8 @@
         </nav>
 
         <main>
-            <!-- Section 1: The Big Picture -->
             <section id="overview" class="content-section active">
-                <div class="text-center mb-12">
+                 <div class="text-center mb-12">
                     <h2 class="text-2xl md:text-3xl font-bold mb-2">A New Reality: College AI on Campus</h2>
                     <p class="max-w-3xl mx-auto text-gray-600 prose-styles">The year 2025 marks a definitive inflection point. Generative AI is no longer an emerging technology; it is a foundational, student-led movement reshaping higher education. From late-night study sessions to final paper submissions, a dedicated AI assistant has become an indispensable, if controversial, partner in the academic journey. This overview captures the sheer scale of this new College AI reality, highlighting the velocity of its adoption and the central tensions it creates between student practice and institutional policy.</p>
                 </div>
@@ -156,7 +303,6 @@
                 </div>
             </section>
 
-            <!-- Section 2: The Student Experience -->
             <section id="student" class="content-section">
                 <div class="text-center mb-12">
                     <h2 class="text-2xl md:text-3xl font-bold mb-2">The Student Playbook: From Paper AI to Study Buddy</h2>
@@ -165,7 +311,22 @@
                 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
                     <div class="bg-white p-6 rounded-xl border border-gray-200">
-                        <h3 class="text-xl font-bold text-center mb-4">How Students Use AI Tools</h3>
+                        <h3 class="text-xl font-bold text-center mb-2">How Students Use AI Tools</h3>
+                        <p class="text-center text-gray-600 text-sm mb-4">Filter by academic area to see how usage differs:</p>
+                        <div id="useCaseFilter" class="flex justify-center items-center gap-2 mb-4 flex-wrap">
+                            <button class="filter-button active" data-discipline="all">All Students</button>
+                            <button class="filter-button" data-discipline="stem">STEM</button>
+                            <button class="filter-button" data-discipline="humanities">Humanities</button>
+                            <button class="filter-button" data-discipline="business">Business</button>
+                            <button class="filter-button" data-discipline="social_sciences">Social Sciences</button>
+                            <button class="filter-button" data-discipline="health_sciences">Health Sciences</button>
+                            <button class="filter-button" data-discipline="education">Education</button>
+                            <button class="filter-button" data-discipline="fine_arts">Fine Arts</button>
+                            <button class="filter-button" data-discipline="computer_science">Computer Science</button>
+                            <button class="filter-button" data-discipline="engineering">Engineering</button>
+                            <button class="filter-button" data-discipline="law">Law</button>
+                            <button class="filter-button" data-discipline="communications">Communications</button>
+                        </div>
                         <div class="chart-container h-[450px] max-h-[50vh]">
                             <canvas id="useCaseChart"></canvas>
                         </div>
@@ -179,47 +340,132 @@
                     </div>
                 </div>
                 
-                <div class="bg-white p-6 md:p-8 rounded-xl border border-gray-200 prose-styles mb-12">
-                    <h3>A Tool for Every Task: The Rise of the Writing AI</h3>
-                    <p>The chart reveals a student body using College AI as a Swiss Army knife. <b>Solving Problems (69%)</b> is a leading use case, with students turning to an AI assistant as an on-demand tutor. Close behind, <b>Proofreading & Editing (67%)</b> shows a massive adoption of the Writing AI. Students leverage it to refine their work, improve sentence flow, and ensure clarity. This is less about generating content and more about refining it—a distinction many students feel is ethical.</p>
-                    <p>Likewise, <b>Summarizing Content (61%)</b> is a key efficiency strategy. Faced with dense articles, a Paper AI can extract core arguments, allowing students to focus their deep-reading time. Finally, <b>Brainstorming (55%)</b> highlights the AI assistant's role at the start of the creative process. A good Paper AI is invaluable for generating research questions and building momentum on daunting assignments.</p>
-                </div>
-
-                <div class="bg-white p-6 md:p-8 rounded-xl border border-gray-200">
-                    <h3 class="text-xl font-bold text-center mb-4">The Campus Cognitive Dissonance</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-center">
-                        <div class="bg-amber-50 p-6 rounded-lg border border-amber-200">
-                            <h4 class="font-bold text-lg text-amber-800">The "Cheating Paradox"</h4>
-                            <p class="mt-2 text-gray-700">A profound conflict exists between student beliefs and actions, fueled by institutional silence.</p>
-                            <div class="flex justify-around items-center mt-4">
-                                <div>
-                                    <p class="text-4xl font-bold text-amber-700">54%</p>
-                                    <p class="text-sm">Believe using a Paper AI is cheating.</p>
+                <div class="bg-white p-6 md:p-8 rounded-xl border border-gray-200 mb-12">
+                    <h3 class="text-xl font-bold text-center mb-4">The Integrity Spectrum: What is Cheating?</h3>
+                    <div class="grid grid-cols-1 gap-8">
+                        <div id="cheating-paradox" class="bg-amber-50 p-6 rounded-lg border border-amber-200">
+                            <h4 class="font-bold text-lg text-amber-800 text-center">The Ethical Gray Area</h4>
+                            <p class="mt-2 text-gray-700 text-center text-sm">Students draw nuanced ethical lines. See how your views compare. Vote on each scenario:</p>
+                            <div class="space-y-6 mt-6">
+                                <div class="scenario-card" data-scenario="1" data-ethical="92" data-cheating="8">
+                                    <p class="font-semibold text-gray-800">Scenario 1: Using a <span class="font-bold">Writing AI</span> to correct grammar and spelling mistakes on a finished draft.</p>
+                                    <div class="vote-buttons mt-3 flex gap-4"><button class="vote-btn" data-vote="ethical">Ethical Use</button><button class="vote-btn" data-vote="cheating">Cheating</button></div>
+                                    <div class="results hidden mt-4">
+                                        <p class="text-xs text-center mb-2">You voted <span class="font-bold user-vote"></span>. Here's how students responded:</p>
+                                        <div class="result-bar mb-2"><div class="progress-bg"><div class="progress-bar progress-ethical" style="width: 0%;">Ethical (92%)</div></div></div>
+                                        <div class="result-bar"><div class="progress-bg"><div class="progress-bar progress-cheating" style="width: 0%;">Cheating (8%)</div></div></div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p class="text-4xl font-bold text-amber-700">56%</p>
-                                    <p class="text-sm">Admit to using one on assignments.</p>
+                                <div class="scenario-card" data-scenario="2" data-ethical="45" data-cheating="55">
+                                    <p class="font-semibold text-gray-800">Scenario 2: Asking a <span class="font-bold">Paper AI</span> to generate a detailed outline and a list of sources.</p>
+                                     <div class="vote-buttons mt-3 flex gap-4"><button class="vote-btn" data-vote="ethical">Ethical Use</button><button class="vote-btn" data-vote="cheating">Cheating</button></div>
+                                    <div class="results hidden mt-4">
+                                        <p class="text-xs text-center mb-2">You voted <span class="font-bold user-vote"></span>. Here's how students responded:</p>
+                                        <div class="result-bar mb-2"><div class="progress-bg"><div class="progress-bar progress-ethical" style="width: 0%;">Ethical (45%)</div></div></div>
+                                        <div class="result-bar"><div class="progress-bg"><div class="progress-bar progress-cheating" style="width: 0%;">Cheating (55%)</div></div></div>
+                                    </div>
+                                </div>
+                                <div class="scenario-card" data-scenario="3" data-ethical="5" data-cheating="95">
+                                    <p class="font-semibold text-gray-800">Scenario 3: Submitting an essay where one of the five paragraphs was entirely generated by an <span class="font-bold">AI assistant</span>.</p>
+                                     <div class="vote-buttons mt-3 flex gap-4"><button class="vote-btn" data-vote="ethical">Ethical Use</button><button class="vote-btn" data-vote="cheating">Cheating</button></div>
+                                    <div class="results hidden mt-4">
+                                        <p class="text-xs text-center mb-2">You voted <span class="font-bold user-vote"></span>. Here's how students responded:</p>
+                                        <div class="result-bar mb-2"><div class="progress-bg"><div class="progress-bar progress-ethical" style="width: 0%;">Ethical (5%)</div></div></div>
+                                        <div class="result-bar"><div class="progress-bg"><div class="progress-bar progress-cheating" style="width: 0%;">Cheating (95%)</div></div></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-sky-50 p-6 rounded-lg border border-sky-200">
-                            <h4 class="font-bold text-lg text-sky-800">The Trust Deficit</h4>
-                            <p class="mt-2 text-gray-700">Despite high usage, students harbor significant concerns about their AI assistant.</p>
-                             <ul class="text-left mt-4 space-y-2 text-gray-600 text-sm list-disc list-inside">
-                                 <li><strong>Accuracy & Misinformation:</strong> 64% worry about the reliability of their chosen College AI.</li>
-                                 <li><strong>Data Privacy:</strong> Students are anxious about how their data and prompts are used.</li>
-                                 <li><strong>Skill Degradation:</strong> Over half worry that over-reliance on a Writing AI will harm their own skills.</li>
-                             </ul>
-                        </div>
-                    </div>
-                     <div class="prose-styles mt-6">
-                        <p>The "Cheating Paradox" data is telling. Students draw sophisticated ethical lines: using a Paper AI to generate an entire essay is wrong, but using a Writing AI to clean up grammar is seen as a legitimate tool. The problem is that these nuanced distinctions rarely align with vague university policies, forcing students into a state of ethical ambiguity.</p>
-                        <p>Simultaneously, the "Trust Deficit" shows that high usage does not equal blind faith. Students are acutely aware of their AI assistant's pitfalls. This reveals a critical user base—one that is hungry for guidance on how to mitigate risks while still reaping the benefits.</p>
                     </div>
                 </div>
+
+                <div class="bg-white p-6 md:p-8 rounded-xl border border-gray-200 mb-12">
+                    <h3 class="text-xl font-bold text-center mb-6">Student Personas: AI in Action</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="persona-card">
+                           <div class="persona-avatar bg-indigo-500">CS</div>
+                           <h4 class="text-lg font-bold text-center mt-4">Chloe, Computer Science Major</h4>
+                           <p class="persona-quote mt-4 mb-4">"My AI assistant is my pair programmer. It doesn't do the thinking for me, but it speeds up everything else so I can focus on solving the actual problem."</p>
+                           <h5 class="font-semibold mb-2">Weekly AI Playbook:</h5>
+                           <ul class="playbook-list space-y-2 text-sm">
+                               <li>Debugging Python scripts for a data science class.</li>
+                               <li>Generating boilerplate code for a new web app project.</li>
+                               <li>Asking for step-by-step explanations of complex algorithms.</li>
+                               <li>Summarizing the documentation for an unfamiliar API.</li>
+                           </ul>
+                           <p class="text-sm text-center font-semibold mt-auto pt-4">Go-To Tools: GitHub Copilot, ChatGPT-4</p>
+                        </div>
+                        <div class="persona-card">
+                           <div class="persona-avatar bg-emerald-600">LH</div>
+                           <h4 class="text-lg font-bold text-center mt-4">Leo, History Major</h4>
+                           <p class="persona-quote mt-4 mb-4">"I use my Paper AI as a research assistant. It helps me find connections I might have missed and argue my points more effectively."</p>
+                           <h5 class="font-semibold mb-2">Weekly AI Playbook:</h5>
+                           <ul class="playbook-list space-y-2 text-sm">
+                               <li>Brainstorming thesis statements for a paper on the Roman Empire.</li>
+                               <li>Creating an annotated bibliography from a list of sources.</li>
+                               <li>Refining sentence structure in an essay draft for better flow.</li>
+                               <li>Asking for potential counterarguments to strengthen a thesis.</li>
+                           </ul>
+                           <p class="text-sm text-center font-semibold mt-auto pt-4">Go-To Tools: Perplexity.ai, Claude 3</p>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="bg-white p-6 md:p-8 rounded-xl border border-gray-200 mb-12">
+                    <h3 class="text-xl font-bold text-center mb-2">Visualizing the Integrity Spectrum</h3>
+                    <p class="text-center text-sm text-gray-600 mb-8">Hover over the markers to see where different AI tasks fall on the spectrum from accepted tool to academic misconduct, based on student consensus.</p>
+                    <div class="spectrum-container">
+                        <div class="spectrum-bar"></div>
+                        <div class="spectrum-labels">
+                            <span class="text-green-600">Accepted Tool</span>
+                            <span class="text-yellow-600">Ethical Gray Area</span>
+                            <span class="text-red-600">Misconduct</span>
+                        </div>
+                        
+                        <div class="spectrum-marker" style="left: 8%;">
+                            <div class="spectrum-marker-dot bg-green-500"></div>
+                            <div class="spectrum-marker-info">
+                                <h5 class="font-bold">Grammar & Spell Check</h5>
+                                <p class="text-xs">Using a Writing AI to correct errors. Overwhelmingly seen as an acceptable evolution of tools like spell-check.</p>
+                            </div>
+                        </div>
+
+                        <div class="spectrum-marker" style="left: 25%;">
+                            <div class="spectrum-marker-dot bg-green-400"></div>
+                             <div class="spectrum-marker-info">
+                                <h5 class="font-bold">Brainstorming Ideas</h5>
+                                <p class="text-xs">Using a Paper AI to generate initial ideas or topics. Largely considered ethical, as the student still does all the research and writing.</p>
+                            </div>
+                        </div>
+
+                        <div class="spectrum-marker" style="left: 48%;">
+                            <div class="spectrum-marker-dot bg-yellow-400"></div>
+                             <div class="spectrum-marker-info">
+                                <h5 class="font-bold">Generating an Outline</h5>
+                                <p class="text-xs">A true gray area. Some see it as a helpful structural tool, while others view it as delegating the core thinking of the assignment.</p>
+                            </div>
+                        </div>
+
+                        <div class="spectrum-marker" style="left: 75%;">
+                            <div class="spectrum-marker-dot bg-orange-500"></div>
+                             <div class="spectrum-marker-info">
+                                <h5 class="font-bold">Paraphrasing a Paragraph</h5>
+                                <p class="text-xs">Using an AI assistant to rephrase a specific section of text. Most students view this as crossing a line, as it outsources the work of understanding and synthesis.</p>
+                            </div>
+                        </div>
+
+                        <div class="spectrum-marker" style="left: 95%;">
+                            <div class="spectrum-marker-dot bg-red-500"></div>
+                             <div class="spectrum-marker-info">
+                                <h5 class="font-bold">Generating Full Paragraphs</h5>
+                                <p class="text-xs">Submitting AI-generated text as one's own. Almost universally seen as clear academic misconduct and plagiarism.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </section>
 
-            <!-- Section 3: The Institutional Response -->
             <section id="institution" class="content-section">
                 <div class="text-center mb-12">
                     <h2 class="text-2xl md:text-3xl font-bold mb-2">A Landscape of Lag and Disconnection</h2>
@@ -265,7 +511,6 @@
                 </div>
             </section>
 
-            <!-- Section 4: The Path Forward -->
             <section id="forward" class="content-section">
                  <div class="text-center mb-12">
                     <h2 class="text-2xl md:text-3xl font-bold mb-2">Recommendations and Future Outlook</h2>
@@ -339,7 +584,6 @@
                     </div>
                 </div>
 
-                <!-- Footer with Sources -->
                 <footer class="mt-12 pt-8 border-t border-gray-200 prose-styles text-sm text-gray-500">
                      <h3 class="text-lg font-semibold text-gray-700">Sources & Methodology</h3>
                      <p>The data and insights in this report were synthesized from leading research institutions and publications covering educational technology and artificial intelligence between 2023 and 2025. Key sources include:</p>
@@ -351,7 +595,6 @@
                         <li>BestColleges.com. (2024). <em>Student and Faculty Perspectives on AI in Higher Education</em>. <a href="https://www.bestcolleges.com/research/ai-in-college-statistics/" target="_blank" rel="noopener noreferrer">bestcolleges.com</a></li>
                      </ul>
                 </footer>
-
             </section>
         </main>
 
@@ -360,9 +603,14 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             
+            // Your existing JS code...
             Chart.defaults.font.family = 'Inter, sans-serif';
 
             const commonChartOptions = {
+                animation: {
+                    duration: 1000,
+                    easing: 'easeOutQuart'
+                },
                 plugins: {
                     legend: { labels: { color: '#333333' } },
                     tooltip: {
@@ -389,9 +637,10 @@
                     navButtons.forEach(btn => btn.classList.remove('active'));
                     button.classList.add('active');
                     contentSections.forEach(section => {
-                        section.classList.remove('active');
                         if (section.id === targetId) {
                             section.classList.add('active');
+                        } else {
+                            section.classList.remove('active');
                         }
                     });
                 });
@@ -417,9 +666,14 @@
             setupAccordion('accordion-leaders');
             setupAccordion('accordion-edtech');
 
-            const adoptionTrendCtx = document.getElementById('adoptionTrendChart')?.getContext('2d');
-            if (adoptionTrendCtx) {
-                new Chart(adoptionTrendCtx, {
+            // --- Chart Initialization Storage ---
+            const chartInstances = {};
+
+            // --- Chart Initialization Functions ---
+            function initializeAdoptionChart(element) {
+                 if (!element) return;
+                 const ctx = element.getContext('2d');
+                 chartInstances.adoption = new Chart(ctx, {
                     type: 'line',
                     data: {
                         labels: ['Spring 2023', 'Fall 2023', 'Spring 2024', 'Spring 2025'],
@@ -436,24 +690,66 @@
                 });
             }
 
-            const useCaseCtx = document.getElementById('useCaseChart')?.getContext('2d');
-            const useCaseDetails = document.getElementById('useCaseDetails');
-            const useCaseData = {
-                'Solving Problems': 'Driven by a need for on-demand help, students use their AI assistant as a 24/7 tutor to break down complex topics and work through difficult quantitative problems.',
-                'Proofreading & Editing': 'As a powerful Writing AI, it helps students refine their own work, polishing grammar and style for a more professional final product.',
-                'Summarizing Content': 'To manage heavy reading loads, students leverage a Paper AI to condense dense articles into key takeaways, a crucial efficiency strategy.',
-                'Brainstorming / Ideating': 'The AI assistant serves as an intellectual sparring partner, helping students overcome "blank page" paralysis and explore potential topics or arguments.',
-                'Researching New Topics': 'As a starting point for a paper, an AI assistant helps students get a broad overview of a new topic and identify key concepts for deeper research.'
+            const disciplineData = {
+                all: [69, 67, 61, 55, 46],
+                stem: [78, 55, 60, 50, 48],
+                humanities: [58, 75, 65, 62, 45],
+                business: [60, 70, 72, 68, 50],
+                social_sciences: [62, 68, 75, 65, 55],
+                health_sciences: [75, 65, 70, 50, 40],
+                education: [55, 72, 68, 70, 52],
+                fine_arts: [40, 60, 55, 80, 45],
+                computer_science: [90, 50, 65, 55, 50],
+                engineering: [85, 58, 62, 52, 49],
+                law: [50, 80, 85, 60, 75],
+                communications: [45, 85, 60, 75, 58]
             };
             
-            if (useCaseCtx) {
-                const useCaseChart = new Chart(useCaseCtx, {
+            const useCaseDescriptions = {
+                 'all': {
+                    'default': 'Student motivations range from practical needs like managing heavy workloads to pedagogical ones like filling gaps in classroom instruction. Their chosen AI assistant often serves as a 24/7 personal tutor.',
+                    'Solving Problems': 'Driven by a need for on-demand help, students use their AI assistant as a 24/7 tutor to break down complex topics and work through difficult quantitative problems.',
+                    'Proofreading & Editing': 'As a powerful Writing AI, it helps students refine their own work, polishing grammar and style for a more professional final product.',
+                    'Summarizing Content': 'To manage heavy reading loads, students leverage a Paper AI to condense dense articles into key takeaways, a crucial efficiency strategy.',
+                    'Brainstorming / Ideating': 'The AI assistant serves as an intellectual sparring partner, helping students overcome "blank page" paralysis and explore potential topics or arguments.',
+                    'Researching New Topics': 'As a starting point for a paper, an AI assistant helps students get a broad overview of a new topic and identify key concepts for deeper research.'
+                },
+                'computer_science': {
+                    'default': 'CS students treat AI as a primary development tool for accelerating coding, debugging, and understanding systems.',
+                     'Solving Problems': 'Indispensable for debugging code, explaining error messages, and generating algorithms for complex problems.',
+                    'Proofreading & Editing': 'Used to clean up comments, write clear documentation, and professionalize technical write-ups.',
+                    'Summarizing Content': 'Crucial for understanding dense documentation for APIs, libraries, and frameworks quickly.',
+                    'Brainstorming / Ideating': 'Helps in designing system architecture, brainstorming feature ideas, and exploring different data structures.',
+                    'Researching New Topics': 'Used to quickly learn new programming languages or get up to speed on unfamiliar tech stacks.'
+                },
+                'humanities': {
+                    'default': 'Humanities students leverage AI heavily for text analysis, writing refinement, and exploring diverse perspectives.',
+                    'Solving Problems': 'This often involves asking the AI to explain complex philosophical concepts or historical contexts in simpler terms.',
+                    'Proofreading & Editing': 'The Writing AI is essential for refining argumentative essays, checking for stylistic consistency, and improving the elegance of prose.',
+                    'Summarizing Content': 'Students use their Paper AI to get the gist of dense theoretical texts or long historical documents, focusing their reading time.',
+                    'Brainstorming / Ideating': 'The AI assistant is a powerful tool for generating potential thesis statements, finding counterarguments, or exploring new critical lenses.',
+                    'Researching New Topics': 'Students use AI to quickly get background information on historical figures, literary movements, or philosophical schools of thought.'
+                },
+                 'engineering': {
+                    'default': 'Engineering students use AI as a practical tool for design, calculation, and code generation.',
+                    'Solving Problems': 'AI is indispensable for solving differential equations, simulating circuit behavior, and debugging scripts for data analysis.',
+                    'Proofreading & Editing': 'Used to ensure technical documentation, project proposals, and lab reports are clear, concise, and professional.',
+                    'Summarizing Content': 'AI helps summarize technical standards, patent documents, and academic papers on new materials or methods.',
+                    'Brainstorming / Ideating': 'Students use AI to generate multiple design alternatives for a project or brainstorm solutions to a complex engineering challenge.',
+                    'Researching New Topics': 'AI provides rapid onboarding for unfamiliar technical domains or software libraries required for a project.'
+                }
+            };
+            
+            function initializeUseCaseChart(element) {
+                if (!element) return;
+                const ctx = element.getContext('2d');
+                const useCaseChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
                         labels: ['Solving Problems', 'Proofreading & Editing', 'Summarizing Content', 'Brainstorming / Ideating', 'Researching New Topics'],
                         datasets: [{
                             label: '% of Students Reporting Use',
-                            data: [69, 67, 61, 55, 46],
+                            data: disciplineData.all,
                             backgroundColor: [
                                 'rgba(74, 124, 89, 0.7)','rgba(74, 124, 89, 0.6)','rgba(74, 124, 89, 0.5)','rgba(74, 124, 89, 0.4)','rgba(74, 124, 89, 0.3)'
                             ],
@@ -465,24 +761,29 @@
                         ...commonChartOptions,
                         indexAxis: 'y',
                         scales: {
-                            x: { ticks: { color: '#666' }, grid: { display: true, color: '#EAE7E1' } },
+                            x: { ticks: { color: '#666', beginAtZero: true }, grid: { display: true, color: '#EAE7E1' } },
                             y: { ticks: { color: '#666' }, grid: { display: false } }
                         },
                         onClick: (event, elements) => {
-                            if (elements.length > 0) {
+                            const useCaseDetails = document.getElementById('useCaseDetails');
+                            if (elements.length > 0 && useCaseDetails) {
                                 const index = elements[0].index;
                                 const label = useCaseChart.data.labels[index];
-                                const detailText = useCaseData[label];
+                                const activeDiscipline = document.getElementById('useCaseFilter').querySelector('.active').dataset.discipline;
+                                const descriptions = useCaseDescriptions[activeDiscipline] || useCaseDescriptions['all'];
+                                const detailText = descriptions[label] || descriptions['default'];
                                 useCaseDetails.innerHTML = `<p class="text-lg font-semibold text-[#4A7C59]">${label}</p><p class="text-gray-600">${detailText}</p>`;
                             }
                         }
                     }
                 });
+                chartInstances.useCase = useCaseChart;
             }
-
-            const policyStatusCtx = document.getElementById('policyStatusChart')?.getContext('2d');
-            if(policyStatusCtx) {
-                new Chart(policyStatusCtx, {
+            
+            function initializePolicyChart(element) {
+                if (!element) return;
+                const ctx = element.getContext('2d');
+                chartInstances.policy = new Chart(ctx, {
                     type: 'doughnut',
                     data: {
                         labels: ['Has Formal Policy', 'Developing a Policy', 'No Policy / Unsure'],
@@ -496,9 +797,10 @@
                 });
             }
 
-            const perceptionGapCtx = document.getElementById('perceptionGapChart')?.getContext('2d');
-             if(perceptionGapCtx) {
-                new Chart(perceptionGapCtx, {
+            function initializePerceptionChart(element) {
+                if (!element) return;
+                const ctx = element.getContext('2d');
+                chartInstances.perception = new Chart(ctx, {
                     type: 'bar',
                     data: {
                         labels: ['Views AI as Positive for Teaching'],
@@ -518,6 +820,90 @@
                              }
                          }
                     }
+                });
+            }
+
+
+            // --- Intersection Observer for Chart Animation ---
+            const chartObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const canvasId = entry.target.id;
+                        if (!chartInstances[canvasId]) {
+                             switch(canvasId) {
+                                case 'adoptionTrendChart':
+                                    initializeAdoptionChart(entry.target);
+                                    break;
+                                case 'useCaseChart':
+                                    initializeUseCaseChart(entry.target);
+                                    break;
+                                case 'policyStatusChart':
+                                     initializePolicyChart(entry.target);
+                                     break;
+                                case 'perceptionGapChart':
+                                     initializePerceptionChart(entry.target);
+                                     break;
+                             }
+                             observer.unobserve(entry.target);
+                        }
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            document.querySelectorAll('canvas').forEach(canvas => {
+                chartObserver.observe(canvas);
+            });
+
+            // --- Filter Logic ---
+            const useCaseFilter = document.getElementById('useCaseFilter');
+            if (useCaseFilter) {
+                useCaseFilter.addEventListener('click', (e) => {
+                    if (e.target && e.target.matches('button.filter-button')) {
+                        const discipline = e.target.dataset.discipline;
+                        
+                        useCaseFilter.querySelector('.active').classList.remove('active');
+                        e.target.classList.add('active');
+
+                        const useCaseChart = chartInstances.useCase;
+                        if (useCaseChart && disciplineData[discipline]) {
+                            useCaseChart.data.datasets[0].data = disciplineData[discipline];
+                            useCaseChart.update();
+                        }
+                        
+                        const useCaseDetails = document.getElementById('useCaseDetails');
+                        const descriptions = useCaseDescriptions[discipline] || useCaseDescriptions['all'];
+                        const defaultText = descriptions['default'] || useCaseDescriptions['all']['default'];
+                        if (useCaseDetails) {
+                             useCaseDetails.innerHTML = `<p class="text-lg font-semibold text-[#4A7C59]">Why ${e.target.textContent} Use AI</p><p class="text-gray-600">${defaultText}</p>`;
+                        }
+                    }
+                });
+            }
+            
+            // --- Interactive Paradox Logic ---
+            const paradoxContainer = document.getElementById('cheating-paradox');
+            if (paradoxContainer) {
+                const voteButtons = paradoxContainer.querySelectorAll('.vote-btn');
+                voteButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const card = button.closest('.scenario-card');
+                        const vote = button.dataset.vote;
+                        
+                        card.querySelectorAll('.vote-btn').forEach(btn => btn.disabled = true);
+                        button.classList.add(vote === 'ethical' ? 'selected-ethical' : 'selected-cheating');
+                        
+                        const resultsDiv = card.querySelector('.results');
+                        resultsDiv.classList.remove('hidden');
+                        resultsDiv.querySelector('.user-vote').textContent = vote.toUpperCase();
+                        
+                        const ethicalPercent = card.dataset.ethical;
+                        const cheatingPercent = card.dataset.cheating;
+                        
+                        setTimeout(() => {
+                           card.querySelector('.progress-ethical').style.width = `${ethicalPercent}%`;
+                           card.querySelector('.progress-cheating').style.width = `${cheatingPercent}%`;
+                        }, 100);
+                    });
                 });
             }
 
