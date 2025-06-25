@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,13 +13,24 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
+    <script>
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
     <style>
         /* Base Styles */
         body {
             font-family: 'Inter', sans-serif;
             background-color: #F8F7F4;
             color: #333333;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
+
         /* Navigation & Tabs */
         .nav-button {
             transition: all 0.3s ease;
@@ -119,48 +130,166 @@
         }
         .glowing { animation: glow 1.5s ease-in-out; }
         /* Scroll Animation Styles */
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .animate-on-scroll.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .animate-on-scroll { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .animate-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
         /* Staggered List Animation */
-        .stagger-fade-in li {
-            opacity: 0;
-            transform: translateY(15px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
+        .stagger-fade-in li { opacity: 0; transform: translateY(15px); transition: opacity 0.5s ease, transform 0.5s ease; }
+        /* Bottom Navigation Button */
+        .next-section-nav { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #EAE7E1; text-align: right; }
+        .next-section-button { background-color: #1a512e; color: white; padding: 0.75rem 1.5rem; border-radius: 9999px; font-weight: 600; transition: background-color 0.3s ease, transform 0.3s ease; display: inline-block; text-decoration: none; }
+        .next-section-button:hover { background-color: #2a8a4d; transform: translateY(-2px); }
+
+
+        /* --- DARK THEME STYLES --- */
+        .dark {
+             color-scheme: dark;
         }
-        /* NEW: Bottom Navigation Button */
-        .next-section-nav {
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid #EAE7E1;
-            text-align: right;
+        .dark body {
+            background-color: #000000;
+            color: #d1d5db;
         }
-        .next-section-button {
-            background-color: #1a512e;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 9999px;
-            font-weight: 600;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            display: inline-block;
-            text-decoration: none;
+        .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+            color: #f9fafb;
         }
-        .next-section-button:hover {
-            background-color: #2a8a4d;
-            transform: translateY(-2px);
+        .dark .nav-button {
+            color: #9ca3af;
+        }
+        .dark .nav-button.active {
+            color: #a7f3d0;
+            border-bottom-color: #6ee7b7;
+        }
+        .dark .border-gray-200 {
+            border-color: #374151;
+        }
+        .dark .text-gray-800 { color: #f9fafb; }
+        .dark .text-gray-600 { color: #9ca3af; }
+        .dark .text-gray-500 { color: #6b7280; }
+        .dark .text-gray-700 { color: #d1d5db; }
+
+        .dark .stat-card,
+        .dark .bg-white {
+            background-color: #111827;
+            border-color: #374151;
+        }
+        .dark .stat-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+        }
+        .dark .text-\[\#4A7C59\] {
+            color: #6ee7b7;
+        }
+        .dark .text-\[\#b33e3e\] {
+            color: #f87171;
+        }
+        .dark .filter-button {
+            background-color: #374151;
+            color: #d1d5db;
+        }
+        .dark .filter-button:hover {
+            background-color: #4b5563;
+        }
+        .dark .filter-button.active {
+            background-color: #312e81;
+            color: #c7d2fe;
+            border-color: #6366f1;
+        }
+        .dark #cheating-paradox {
+            background-color: rgba(251, 191, 36, 0.1);
+            border-color: rgba(251, 191, 36, 0.3);
+        }
+        .dark #cheating-paradox h4 {
+            color: #fcd34d;
+        }
+        .dark .scenario-card {
+            background-color: #1f2937;
+            border-color: #4b5563;
+        }
+        .dark .vote-btn {
+            border-color: #4b5563;
+        }
+        .dark .vote-btn:hover {
+            background-color: #374151;
+        }
+        .dark .vote-btn.selected-ethical {
+            background-color: #064e3b;
+            border-color: #34d399;
+            color: #a7f3d0;
+        }
+        .dark .vote-btn.selected-cheating {
+            background-color: #991b1b;
+            border-color: #f87171;
+            color: #fecaca;
+        }
+        .dark .progress-bg {
+            background-color: #4b5563;
+        }
+        .dark .persona-card {
+            background-color: #111827;
+            border-color: #374151;
+        }
+        .dark .persona-quote {
+            color: #9ca3af;
+            border-left-color: #6ee7b7;
+        }
+        .dark .playbook-list {
+            color: #d1d5db;
+        }
+        .dark .spectrum-marker-dot {
+            border-color: #d1d5db;
+        }
+        .dark .spectrum-marker-info {
+            background-color: #f9fafb;
+            color: #111827;
+        }
+        .dark .spectrum-marker-info h5, .dark .spectrum-marker-info p {
+            color: #111827;
+        }
+        .dark @keyframes glow {
+            50% { box-shadow: 0 0 20px 8px rgba(110, 231, 183, 0.7); }
+        }
+        .dark .p-4.rounded-lg.bg-red-50 {
+            background-color: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        .dark .p-4.rounded-lg.bg-red-50 h4 { color: #fca5a5; }
+        .dark .p-4.rounded-lg.bg-blue-50 {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        .dark .p-4.rounded-lg.bg-blue-50 h4 { color: #93c5fd; }
+        
+        .dark .accordion-button {
+            background-color: #1f2937;
+        }
+        .dark .accordion-button:hover {
+            background-color: #374151;
+        }
+        .dark .prose-styles a {
+            color: #6ee7b7;
+        }
+        .dark footer.prose-styles, .dark footer .text-gray-500 {
+            color: #6b7280;
+        }
+        .dark .next-section-button {
+            background-color: #047857;
+        }
+        .dark .next-section-button:hover {
+            background-color: #059669;
+        }
+        .dark .next-section-nav {
+            border-top-color: #374151;
         }
     </style>
 </head>
 <body class="antialiased">
 
     <div class="min-h-screen container mx-auto px-4 py-8 md:py-12">
-        <header class="text-center mb-8 md:mb-12">
+        <header class="relative text-center mb-8 md:mb-12">
+             <div class="absolute top-0 right-0">
+                <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                    <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                    <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 5.05A1 1 0 003.636 6.464l.707.707a1 1 0 001.414-1.414l-.707-.707zM3 11a1 1 0 100-2H2a1 1 0 100 2h1zM6.464 16.364l-.707.707a1 1 0 001.414 1.414l.707-.707a1 1 0 00-1.414-1.414z"></path></svg>
+                </button>
+            </div>
             <h1 class="text-3xl md:text-5xl font-bold text-gray-800">The College AI Revolution in 2025</h1>
             <p class="mt-2 md:mt-4 text-lg md:text-xl text-gray-600 max-w-4xl mx-auto">An Interactive White Paper on Student Adoption, Use Cases, and Institutional Responses to Generative AI</p>
         </header>
@@ -171,25 +300,25 @@
             <button class="nav-button text-gray-500 border-b-2 border-transparent px-4 py-3 text-sm md:text-base" role="tab" aria-selected="false" aria-controls="institution" data-target="institution">The Institutional Response</button>
             <button class="nav-button text-gray-500 border-b-2 border-transparent px-4 py-3 text-sm md:text-base" role="tab" aria-selected="false" aria-controls="forward" data-target="forward">Recommendations</button>
         </nav>
-
+        
         <main>
             <section id="overview" class="content-section active" role="tabpanel">
-                <div class="text-center mb-12">
+                 <div class="text-center mb-12">
                     <h2 class="text-2xl md:text-3xl font-bold mb-2">A New Reality: College AI on Campus</h2>
                     <p class="max-w-3xl mx-auto text-gray-600 prose-styles">The year 2025 marks a definitive inflection point in higher education, one driven not by top-down institutional mandate, but by a grassroots technological movement. Generative Artificial Intelligence is no longer an emerging novelty discussed in computer science departments; it has become a foundational, student-led force that is actively and irreversibly reshaping academic practices. From the late-night pressures of study sessions to the final polish of term papers, a dedicated AI assistant has evolved into an indispensable, if controversial, partner in the modern academic journey. This report captures the sheer scale and velocity of this new College AI reality. It illuminates the core friction points between organic student adoption and the lagging pace of institutional adaptation, setting the stage for the critical challenges and opportunities that lie ahead.</p>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                    <div class="stat-card p-6 rounded-xl text-center animate-on-scroll">
+                    <div class="stat-card p-6 rounded-xl text-center bg-white animate-on-scroll">
                         <div class="text-5xl font-bold text-[#4A7C59]" data-value="86">0%</div>
                         <p class="mt-2 font-semibold">Student Adoption Rate</p>
                         <p class="text-sm text-gray-500 mt-1">of U.S. undergraduate students now report using generative AI tools in their academic studies.</p>
                     </div>
-                    <div class="stat-card p-6 rounded-xl text-center animate-on-scroll">
+                    <div class="stat-card p-6 rounded-xl text-center bg-white animate-on-scroll">
                         <div class="text-5xl font-bold text-[#4A7C59]" data-value="42">0%</div>
                         <p class="mt-2 font-semibold">Frequent Engagement</p>
                         <p class="text-sm text-gray-500 mt-1">use a generative AI assistant on a weekly or daily basis, indicating deep workflow integration.</p>
                     </div>
-                    <div class="stat-card p-6 rounded-xl text-center animate-on-scroll">
+                    <div class="stat-card p-6 rounded-xl text-center bg-white animate-on-scroll">
                         <div class="text-5xl font-bold text-[#b33e3e]" data-value="72">0%</div>
                         <p class="mt-2 font-semibold">Institutional Policy Gap</p>
                         <p class="text-sm text-gray-500 mt-1">of post-secondary institutions lack a formal, clearly communicated, and active AI usage policy.</p>
@@ -208,16 +337,16 @@
                         <canvas id="adoptionTrendChart" role="img" aria-label="A line chart showing student AI adoption climbing from 30% in Spring 2023 to 86% in Spring 2025."></canvas>
                     </div>
                      <div class="prose-styles mt-6">
-                        <p>The trajectory shown is less a curve and more a cliff face. The initial wave in early 2023, driven by public curiosity, quickly gave way to pragmatic, widespread adoption. By 2025, what began as a tech trend has solidified into an academic norm, fundamentally altering student expectations for how they learn, research, and create with their personal AI assistant.</p>
-                    </div>
+                         <p>The trajectory shown is less a curve and more a cliff face. The initial wave in early 2023, driven by public curiosity, quickly gave way to pragmatic, widespread adoption. By 2025, what began as a tech trend has solidified into an academic norm, fundamentally altering student expectations for how they learn, research, and create with their personal AI assistant.</p>
+                     </div>
                 </div>
                 <div class="next-section-nav animate-on-scroll">
                     <a href="#" class="next-section-button" data-next-target="student">Next Section: The Student Experience &rarr;</a>
                 </div>
             </section>
-
+            
             <section id="student" class="content-section" role="tabpanel">
-                <div class="text-center mb-12">
+                 <div class="text-center mb-12">
                     <h2 class="text-2xl md:text-3xl font-bold mb-2">The Student Playbook: From Paper AI to Study Buddy</h2>
                     <p class="max-w-3xl mx-auto text-gray-600 prose-styles">To fully comprehend the depth of the College AI shift, it is essential to move beyond aggregate adoption rates and examine the nuanced, sophisticated ways in which students deploy these tools. They are not passive consumers of technology; rather, they are active and strategic users, deploying a versatile AI assistant to augment cognitive weaknesses, accelerate existing strengths, and navigate the intense pressures of modern academic life. Their use cases are diverse and context-dependent, ranging from employing a dedicated Writing AI for grammatical and stylistic editing to leveraging a Paper AI for initial research brainstorming and conceptual outlining. This section dissects the student-developed "playbook" for AI integration.</p>
                 </div>
@@ -226,18 +355,18 @@
                     <h3 class="text-xl font-bold text-center mb-2">How Students Use AI Tools</h3>
                     <p class="text-center text-gray-600 text-sm mb-6">Analysis of student-reported activities reveals distinct patterns of AI use that vary significantly by academic discipline. Filter the data below to explore these differences.</p>
                     <div id="useCaseFilter" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 mb-8 max-w-5xl mx-auto">
-                        <button class="filter-button active" data-discipline="all">All Students</button>
-                        <button class="filter-button" data-discipline="stem">STEM</button>
-                        <button class="filter-button" data-discipline="humanities">Humanities</button>
-                        <button class="filter-button" data-discipline="business">Business</button>
-                        <button class="filter-button" data-discipline="social_sciences">Social Sciences</button>
-                        <button class="filter-button" data-discipline="health_sciences">Health Sciences</button>
-                        <button class="filter-button" data-discipline="education">Education</button>
-                        <button class="filter-button" data-discipline="fine_arts">Fine Arts</button>
-                        <button class="filter-button" data-discipline="computer_science">Computer Science</button>
-                        <button class="filter-button" data-discipline="engineering">Engineering</button>
-                        <button class="filter-button" data-discipline="law">Law</button>
-                        <button class="filter-button" data-discipline="communications">Communications</button>
+                         <button class="filter-button active" data-discipline="all">All Students</button>
+                         <button class="filter-button" data-discipline="stem">STEM</button>
+                         <button class="filter-button" data-discipline="humanities">Humanities</button>
+                         <button class="filter-button" data-discipline="business">Business</button>
+                         <button class="filter-button" data-discipline="social_sciences">Social Sciences</button>
+                         <button class="filter-button" data-discipline="health_sciences">Health Sciences</button>
+                         <button class="filter-button" data-discipline="education">Education</button>
+                         <button class="filter-button" data-discipline="fine_arts">Fine Arts</button>
+                         <button class="filter-button" data-discipline="computer_science">Computer Science</button>
+                         <button class="filter-button" data-discipline="engineering">Engineering</button>
+                         <button class="filter-button" data-discipline="law">Law</button>
+                         <button class="filter-button" data-discipline="communications">Communications</button>
                     </div>
                     <div class="chart-container">
                         <canvas id="useCaseChart" role="img" aria-label="A bar chart showing how students use AI tools. Click a filter to see data for specific disciplines."></canvas>
@@ -281,30 +410,30 @@
                     </div>
                 </div>
 
-                 <div class="bg-white p-6 md:p-8 rounded-xl border border-gray-200 mb-12 animate-on-scroll">
-                     <h3 class="text-xl font-bold text-center mb-2">Visualizing the Integrity Spectrum</h3>
-                     <p class="text-center text-sm text-gray-600 mb-8">The interactive scenarios above can be mapped to a broader spectrum of academic integrity. Student consensus data reveals a clear continuum from tasks considered acceptable tools for learning to those deemed clear academic misconduct. Hover over the markers to explore where various common AI-assisted tasks fall along this student-defined spectrum.</p>
-                     <div class="spectrum-container">
-                         <div class="spectrum-bar"></div>
-                         <div class="spectrum-labels">
-                             <span class="text-green-600">Accepted Tool</span>
-                             <span class="text-yellow-600">Ethical Gray Area</span>
-                             <span class="text-red-600">Misconduct</span>
-                         </div>
-                         <div id="marker-grammar" class="spectrum-marker" style="left: 8%;">
-                             <div class="spectrum-marker-dot bg-green-500"></div>
-                             <div class="spectrum-marker-info"><h5 class="font-bold">Grammar & Spell Check</h5><p class="text-xs">Using a Writing AI to correct errors. Overwhelmingly seen as an acceptable evolution of tools like spell-check.</p></div>
-                         </div>
-                         <div id="marker-outline" class="spectrum-marker" style="left: 48%;">
-                             <div class="spectrum-marker-dot bg-yellow-400"></div>
-                             <div class="spectrum-marker-info"><h5 class="font-bold">Generating an Outline</h5><p class="text-xs">A true gray area. Some see it as a helpful structural tool, while others view it as delegating the core thinking of the assignment.</p></div>
-                         </div>
-                         <div id="marker-paragraph" class="spectrum-marker" style="left: 95%;">
-                             <div class="spectrum-marker-dot bg-red-500"></div>
-                             <div class="spectrum-marker-info"><h5 class="font-bold">Generating Full Paragraphs</h5><p class="text-xs">Submitting AI-generated text as one's own. Almost universally seen as clear academic misconduct and plagiarism.</p></div>
-                         </div>
-                     </div>
-                 </div>
+                <div class="bg-white p-6 md:p-8 rounded-xl border border-gray-200 mb-12 animate-on-scroll">
+                    <h3 class="text-xl font-bold text-center mb-2">Visualizing the Integrity Spectrum</h3>
+                    <p class="text-center text-sm text-gray-600 mb-8">The interactive scenarios above can be mapped to a broader spectrum of academic integrity. Student consensus data reveals a clear continuum from tasks considered acceptable tools for learning to those deemed clear academic misconduct. Hover over the markers to explore where various common AI-assisted tasks fall along this student-defined spectrum.</p>
+                    <div class="spectrum-container">
+                        <div class="spectrum-bar"></div>
+                        <div class="spectrum-labels">
+                            <span class="text-green-600">Accepted Tool</span>
+                            <span class="text-yellow-600">Ethical Gray Area</span>
+                            <span class="text-red-600">Misconduct</span>
+                        </div>
+                        <div id="marker-grammar" class="spectrum-marker" style="left: 8%;">
+                            <div class="spectrum-marker-dot bg-green-500"></div>
+                            <div class="spectrum-marker-info"><h5 class="font-bold">Grammar & Spell Check</h5><p class="text-xs">Using a Writing AI to correct errors. Overwhelmingly seen as an acceptable evolution of tools like spell-check.</p></div>
+                        </div>
+                        <div id="marker-outline" class="spectrum-marker" style="left: 48%;">
+                            <div class="spectrum-marker-dot bg-yellow-400"></div>
+                            <div class="spectrum-marker-info"><h5 class="font-bold">Generating an Outline</h5><p class="text-xs">A true gray area. Some see it as a helpful structural tool, while others view it as delegating the core thinking of the assignment.</p></div>
+                        </div>
+                        <div id="marker-paragraph" class="spectrum-marker" style="left: 95%;">
+                            <div class="spectrum-marker-dot bg-red-500"></div>
+                            <div class="spectrum-marker-info"><h5 class="font-bold">Generating Full Paragraphs</h5><p class="text-xs">Submitting AI-generated text as one's own. Almost universally seen as clear academic misconduct and plagiarism.</p></div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="bg-white p-6 md:p-8 rounded-xl border border-gray-200 mb-12 animate-on-scroll">
                     <h3 class="text-xl font-bold text-center mb-6">Student Personas: AI in Action</h3>
@@ -338,13 +467,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="next-section-nav animate-on-scroll">
+                 <div class="next-section-nav animate-on-scroll">
                     <a href="#" class="next-section-button" data-next-target="institution">Next Section: The Institutional Response &rarr;</a>
                 </div>
             </section>
-
+            
             <section id="institution" class="content-section" role="tabpanel">
-                 <div class="text-center mb-12">
+                <div class="text-center mb-12">
                     <h2 class="text-2xl md:text-3xl font-bold mb-2">A Landscape of Lag and Disconnection</h2>
                     <p class="max-w-3xl mx-auto text-gray-600 prose-styles">While students have rapidly adopted and integrated AI into their academic lives, the institutional response has been characterized by a significant lag. This slowness is not necessarily born of unwillingness, but rather from the inherent difficulty of adapting established bureaucratic and pedagogical structures to the velocity of technological change. The result is a campus environment defined by a policy vacuum, widespread confusion among faculty and students, and a significant divergence in perception between administrators, who often see the strategic potential of AI, and the faculty who must grapple with its daily classroom implications. This section examines the data behind this growing disconnect.</p>
                 </div>
@@ -364,13 +493,13 @@
                     </div>
                 </div>
 
-                 <div class="bg-white p-6 md:p-8 rounded-xl border border-gray-200 prose-styles mb-12 animate-on-scroll">
+                <div class="bg-white p-6 md:p-8 rounded-xl border border-gray-200 prose-styles mb-12 animate-on-scroll">
                     <h3>Analysis: Policy Paralysis and Perception Gaps</h3>
                     <p>The donut chart starkly illustrates the prevailing state of policy paralysis. With a combined 72% of colleges and universities either possessing no clear guidelines or being stuck in the development phase, a significant majority of faculty are left to create ad-hoc, course-level rules regarding Writing AI and Paper AI usage. This results in a confusing and inequitable patchwork of policies for students, where the use of an AI assistant might be encouraged in one class and considered grounds for disciplinary action in another.</p>
                     <p>Compounding this structural issue is the critical perception gap between campus leaders and frontline educators. While a commanding 78% of administrators see the strategic potential of integrating a campus-wide AI assistant, only 46% of faculty share this optimism. This chasm reflects a fundamental difference in perspective: administrators often view AI through the lens of efficiency, innovation, and marketing, whereas faculty are on the ground, bearing the immediate burden of redesigning curriculum, re-evaluating learning outcomes, and confronting the pedagogical challenges posed by a ubiquitous Paper AI.</p>
                 </div>
                 
-                 <div class="bg-white p-6 md:p-8 rounded-xl border border-gray-200 animate-on-scroll">
+                <div class="bg-white p-6 md:p-8 rounded-xl border border-gray-200 animate-on-scroll">
                     <h3 class="text-xl font-bold text-center mb-4">Contradictions on the Ground: The Faculty Reality</h3>
                       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                           <div class="p-4 rounded-lg bg-red-50 border border-red-200">
@@ -386,7 +515,7 @@
                         <p>These realities on the ground underscore the depth of the institutional disconnect. For a large minority of instructors, the administrative promise of AI-driven efficiency has morphed into the pedagogical burden of policing the student Writing AI. This not only increases workload but also shifts the faculty role from mentor to detective. Perhaps more damaging in the long term is the help-seeking misperception. When instructors assume students are defaulting to AI, it can chill the very communication and rapport that is essential for effective teaching and deep learning, particularly in an age where AI can handle surface-level questions, leaving instructors to focus on more complex, critical-thinking guidance.</p>
                     </div>
                 </div>
-                <div class="next-section-nav animate-on-scroll">
+                 <div class="next-section-nav animate-on-scroll">
                     <a href="#" class="next-section-button" data-next-target="forward">Next Section: Recommendations &rarr;</a>
                 </div>
             </section>
@@ -395,7 +524,7 @@
                 <div class="text-center mb-12">
                      <h2 class="text-2xl md:text-3xl font-bold mb-2">Recommendations and Future Outlook</h2>
                      <p class="max-w-3xl mx-auto text-gray-600 prose-styles">The data presented in this report necessitates a strategic shift in how higher education approaches generative AI. Moving forward requires institutions and technology partners to transition from a posture of reactive prohibition to one of proactive, principled guidance. The primary objective must be to cultivate deep AI literacy as a core competency for all campus stakeholders. This involves not just understanding how to use the tools, but also how they work, their inherent biases, and their ethical implications. Success will depend on redesigning institutional practices—from academic integrity policies to assessment design—to harness the potential of the modern AI assistant for deeper, more engaged learning rather than viewing it solely as a threat to be mitigated.</p>
-                 </div>
+                </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 animate-on-scroll">
                     <div class="bg-white p-6 rounded-xl border border-gray-200">
@@ -482,60 +611,81 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             
-            Chart.defaults.font.family = 'Inter', 'sans-serif';
+            // --- Theme Toggling Logic ---
+            const themeToggleButton = document.getElementById('theme-toggle');
+            const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+            const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+            const htmlElement = document.documentElement;
             const chartInstances = {};
 
-            const commonChartOptions = {
-                animation: { duration: 1000, easing: 'easeOutQuart' },
-                plugins: {
-                    legend: { labels: { color: '#333333' } },
-                    tooltip: {
-                        backgroundColor: '#333333', titleColor: '#FFFFFF', bodyColor: '#FFFFFF',
-                        padding: 10, cornerRadius: 4, displayColors: false
-                    }
-                },
-                scales: {
-                    x: { ticks: { color: '#666' }, grid: { display: false } },
-                    y: { ticks: { color: '#666' }, grid: { color: '#EAE7E1' } }
-                },
-                maintainAspectRatio: false
-            };
-
-            // --- Navigation ---
-            const navButtons = document.querySelectorAll('.nav-button');
-            const contentSections = document.querySelectorAll('.content-section');
-            navButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const targetId = button.dataset.target;
-                    
-                    const targetSection = document.getElementById(targetId);
-                    const currentActiveSection = document.querySelector('.content-section.active');
-
-                    if (currentActiveSection !== targetSection) {
-                         window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }
-                    
-                    navButtons.forEach(btn => {
-                        btn.classList.remove('active');
-                        btn.setAttribute('aria-selected', 'false');
-                    });
-                    button.classList.add('active');
-                    button.setAttribute('aria-selected', 'true');
-                    contentSections.forEach(section => {
-                        section.classList.toggle('active', section.id === targetId);
-                    });
-                });
+            function updateThemeUI() {
+                if (htmlElement.classList.contains('dark')) {
+                    themeToggleLightIcon.classList.remove('hidden');
+                    themeToggleDarkIcon.classList.add('hidden');
+                } else {
+                    themeToggleLightIcon.classList.add('hidden');
+                    themeToggleDarkIcon.classList.remove('hidden');
+                }
+                // We need to re-initialize the charts on theme change to apply colors correctly
+                // A simple update() doesn't always work for all chart options like grid colors.
+                reinitializeAllCharts();
+            }
+            
+            themeToggleButton.addEventListener('click', () => {
+                htmlElement.classList.toggle('dark');
+                localStorage.setItem('theme', htmlElement.classList.contains('dark') ? 'dark' : 'light');
+                updateThemeUI();
             });
 
-            // --- Scroll-Triggered Animations ---
+
+            // --- Chart Theming and Full Re-initialization ---
+            function getChartOptions() {
+                const isDark = htmlElement.classList.contains('dark');
+                return {
+                    animation: { duration: 1000, easing: 'easeOutQuart' },
+                    plugins: {
+                        legend: { labels: { color: isDark ? '#e5e7eb' : '#333333' } },
+                        tooltip: {
+                            backgroundColor: '#333333', titleColor: '#FFFFFF', bodyColor: '#FFFFFF',
+                            padding: 10, cornerRadius: 4, displayColors: false
+                        }
+                    },
+                    scales: {
+                        x: { ticks: { color: isDark ? '#9ca3af' : '#666' }, grid: { display: false, borderColor: isDark ? '#4b5563' : '#EAE7E1' } },
+                        y: { ticks: { color: isDark ? '#9ca3af' : '#666' }, grid: { color: isDark ? '#374151' : '#EAE7E1', borderColor: isDark ? '#4b5563' : '#EAE7E1' } }
+                    },
+                    maintainAspectRatio: false
+                };
+            }
+            
+            function reinitializeAllCharts() {
+                // Destroy existing charts if they exist
+                Object.values(chartInstances).forEach(chart => {
+                    if (chart) chart.destroy();
+                });
+
+                // Clear the instances object
+                for (const key in chartInstances) {
+                    delete chartInstances[key];
+                }
+
+                // Re-run the observer on all canvases to re-initialize them
+                document.querySelectorAll('canvas').forEach(canvas => {
+                    chartObserver.observe(canvas);
+                });
+            }
+
+            Chart.defaults.font.family = 'Inter', 'sans-serif';
+
+            // --- ALL OTHER JS LOGIC (Navigation, Animations, Chart Init, etc.) ---
             const countUp = (el) => {
                 const target = +el.getAttribute('data-value');
+                // Check if the element is already at the target value to prevent re-running
                 if (parseInt(el.textContent) === target) return; 
                 const duration = 1500;
                 const suffix = el.textContent.includes('%') ? '%' : '';
                 let start = 0;
                 const stepTime = Math.abs(Math.floor(duration / target));
-
                 const timer = setInterval(() => {
                     start += 1;
                     el.textContent = start + suffix;
@@ -550,11 +700,9 @@
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('is-visible');
-                        
                         if (entry.target.querySelector('[data-value]')) {
                             countUp(entry.target.querySelector('[data-value]'));
                         }
-
                         if (entry.target.classList.contains('stagger-fade-in')) {
                             const listItems = entry.target.querySelectorAll('li');
                             listItems.forEach((item, index) => {
@@ -564,7 +712,8 @@
                                 }, index * 150);
                             });
                         }
-                        observer.unobserve(entry.target);
+                        // Don't unobserve, so animations can re-trigger if scrolled out and back in.
+                        // observer.unobserve(entry.target); 
                     }
                 });
             }, { threshold: 0.15 });
@@ -572,8 +721,133 @@
             document.querySelectorAll('.animate-on-scroll, .stagger-fade-in').forEach(el => {
                 animationObserver.observe(el);
             });
+            
+            // --- Chart Initialization Functions ---
+            const disciplineData = {
+                all: [69, 67, 61, 55, 46], stem: [78, 55, 60, 50, 48],
+                humanities: [58, 75, 65, 62, 45], business: [60, 70, 72, 68, 50],
+                social_sciences: [62, 68, 75, 65, 55], health_sciences: [75, 65, 70, 50, 40],
+                education: [55, 72, 68, 70, 52], fine_arts: [40, 60, 55, 80, 45],
+                computer_science: [90, 50, 65, 55, 50], engineering: [85, 58, 62, 52, 49],
+                law: [50, 80, 85, 60, 75], communications: [45, 85, 60, 75, 58]
+            };
 
-            // --- Accordion Logic ---
+            function initializeAdoptionChart(element) {
+                if (!element || chartInstances.adoptionTrendChart) return;
+                const isDark = htmlElement.classList.contains('dark');
+                const ctx = element.getContext('2d');
+                chartInstances.adoptionTrendChart = new Chart(ctx, {
+                    type: 'line', 
+                    data: { 
+                        labels: ['Spring 2023', 'Fall 2023', 'Spring 2024', 'Spring 2025'], 
+                        datasets: [{ 
+                            label: '% of Students Using GenAI for Studies', 
+                            data: [30, 49, 82, 86], 
+                            borderColor: isDark ? '#6ee7b7' : '#4A7C59',
+                            backgroundColor: isDark ? 'rgba(110, 231, 183, 0.1)' : 'rgba(74, 124, 89, 0.1)',
+                            fill: true, 
+                            tension: 0.4 
+                        }] 
+                    },
+                    options: getChartOptions()
+                });
+            }
+
+            function initializeUseCaseChart(element) {
+                if (!element || chartInstances.useCaseChart) return;
+                const isDark = htmlElement.classList.contains('dark');
+                const ctx = element.getContext('2d');
+                chartInstances.useCaseChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Solving Problems', 'Proofreading & Editing', 'Summarizing Content', 'Brainstorming / Ideating', 'Researching New Topics'],
+                        datasets: [{
+                            label: '% of Students Reporting Use',
+                            data: disciplineData.all,
+                            backgroundColor: isDark ? ['rgba(110, 231, 183, 0.7)','rgba(110, 231, 183, 0.6)','rgba(110, 231, 183, 0.5)','rgba(110, 231, 183, 0.4)','rgba(110, 231, 183, 0.3)'] : ['rgba(74, 124, 89, 0.7)','rgba(74, 124, 89, 0.6)','rgba(74, 124, 89, 0.5)','rgba(74, 124, 89, 0.4)','rgba(74, 124, 89, 0.3)'],
+                            borderColor: isDark ? '#6ee7b7' : '#4A7C59',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: { ...getChartOptions(), indexAxis: 'y' }
+                });
+            }
+
+            function initializePolicyChart(element) {
+                if (!element || chartInstances.policyStatusChart) return;
+                const isDark = htmlElement.classList.contains('dark');
+                const ctx = element.getContext('2d');
+                chartInstances.policyStatusChart = new Chart(ctx, {
+                    type: 'doughnut', 
+                    data: { 
+                        labels: ['Has Formal Policy', 'Developing a Policy', 'No Policy / Unsure'], 
+                        datasets: [{ 
+                            data: [28, 32, 40], 
+                            backgroundColor: isDark ? ['#6ee7b7', '#4a7c59', '#b91c1c'] : ['#4A7C59', '#a7c7b1', '#b33e3e'], 
+                            hoverOffset: 4 
+                        }] 
+                    },
+                    options: { ...getChartOptions(), scales: { x: {display: false}, y: {display: false}} }
+                });
+            }
+
+            function initializePerceptionChart(element) {
+                if (!element || chartInstances.perceptionGapChart) return;
+                const isDark = htmlElement.classList.contains('dark');
+                const ctx = element.getContext('2d');
+                chartInstances.perceptionGapChart = new Chart(ctx, {
+                    type: 'bar', 
+                    data: { 
+                        labels: ['Views AI as Positive for Teaching'], 
+                        datasets: [ 
+                            { label: 'Administrators', data: [78], backgroundColor: isDark ? '#6ee7b7' : '#4A7C59' }, 
+                            { label: 'Faculty', data: [46], backgroundColor: isDark ? '#4a7c59' : '#a7c7b1' } 
+                        ] 
+                    },
+                    options: { ...getChartOptions(), scales: { ...getChartOptions().scales, y: { beginAtZero: true, max: 100, ticks: { callback: (value) => value + "%", ...getChartOptions().scales.y.ticks } } } }
+                });
+            }
+
+            const chartObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const canvasId = entry.target.id;
+                        switch(canvasId) {
+                            case 'adoptionTrendChart': initializeAdoptionChart(entry.target); break;
+                            case 'useCaseChart': initializeUseCaseChart(entry.target); break;
+                            case 'policyStatusChart': initializePolicyChart(entry.target); break;
+                            case 'perceptionGapChart': initializePerceptionChart(entry.target); break;
+                        }
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            // Initialize theme and then observe charts
+            updateThemeUI();
+            
+            // --- Navigation, Accordion, and other interactive elements ---
+            const navButtons = document.querySelectorAll('.nav-button');
+            const contentSections = document.querySelectorAll('.content-section');
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.dataset.target;
+                    const targetSection = document.getElementById(targetId);
+                    
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    
+                    navButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.setAttribute('aria-selected', 'false');
+                    });
+                    button.classList.add('active');
+                    button.setAttribute('aria-selected', 'true');
+                    contentSections.forEach(section => {
+                        section.classList.toggle('active', section.id === targetId);
+                    });
+                });
+            });
+
             function setupAccordion(containerId) {
                 const accordionContainer = document.getElementById(containerId);
                 if(!accordionContainer) return;
@@ -593,80 +867,7 @@
             }
             setupAccordion('accordion-leaders');
             setupAccordion('accordion-edtech');
-
-            // --- Chart Data ---
-            const useCaseLabels = ['Solving Problems', 'Proofreading & Editing', 'Summarizing Content', 'Brainstorming / Ideating', 'Researching New Topics'];
-            const disciplineData = {
-                all: [69, 67, 61, 55, 46], stem: [78, 55, 60, 50, 48],
-                humanities: [58, 75, 65, 62, 45], business: [60, 70, 72, 68, 50],
-                social_sciences: [62, 68, 75, 65, 55], health_sciences: [75, 65, 70, 50, 40],
-                education: [55, 72, 68, 70, 52], fine_arts: [40, 60, 55, 80, 45],
-                computer_science: [90, 50, 65, 55, 50], engineering: [85, 58, 62, 52, 49],
-                law: [50, 80, 85, 60, 75], communications: [45, 85, 60, 75, 58]
-            };
-
-            // --- Chart Initialization Functions ---
-            function initializeAdoptionChart(element) {
-                if (!element) return;
-                const ctx = element.getContext('2d');
-                chartInstances.adoption = new Chart(ctx, {
-                    type: 'line', data: { labels: ['Spring 2023', 'Fall 2023', 'Spring 2024', 'Spring 2025'], datasets: [{ label: '% of Students Using GenAI for Studies', data: [30, 49, 82, 86], borderColor: '#4A7C59', backgroundColor: 'rgba(74, 124, 89, 0.1)', fill: true, tension: 0.4 }] },
-                    options: { ...commonChartOptions }
-                });
-            }
-
-            function initializeUseCaseChart(element) {
-                if (!element) return;
-                const ctx = element.getContext('2d');
-                const useCaseChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: useCaseLabels,
-                        datasets: [{ label: '% of Students Reporting Use', data: disciplineData.all, backgroundColor: ['rgba(74, 124, 89, 0.7)','rgba(74, 124, 89, 0.6)','rgba(74, 124, 89, 0.5)','rgba(74, 124, 89, 0.4)','rgba(74, 124, 89, 0.3)'], borderColor: '#4A7C59', borderWidth: 1 }]
-                    },
-                    options: { ...commonChartOptions, indexAxis: 'y' }
-                });
-                chartInstances.useCase = useCaseChart;
-            }
             
-            function initializePolicyChart(element) {
-                if (!element) return;
-                const ctx = element.getContext('2d');
-                chartInstances.policy = new Chart(ctx, {
-                    type: 'doughnut', data: { labels: ['Has Formal Policy', 'Developing a Policy', 'No Policy / Unsure'], datasets: [{ data: [28, 32, 40], backgroundColor: ['#4A7C59', '#a7c7b1', '#b33e3e'], hoverOffset: 4 }] },
-                    options: { ...commonChartOptions, scales: { x: {display: false}, y: {display: false}} }
-                });
-            }
-
-            function initializePerceptionChart(element) {
-                if (!element) return;
-                const ctx = element.getContext('2d');
-                chartInstances.perception = new Chart(ctx, {
-                    type: 'bar', data: { labels: ['Views AI as Positive for Teaching'], datasets: [ { label: 'Administrators', data: [78], backgroundColor: '#4A7C59' }, { label: 'Faculty', data: [46], backgroundColor: '#a7c7b1' } ] },
-                    options: { ...commonChartOptions, scales: { ...commonChartOptions.scales, y: { beginAtZero: true, max: 100, ticks: { callback: (value) => value + "%" } } } }
-                });
-            }
-
-            // --- Chart Observer for lazy loading ---
-            const chartObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const canvasId = entry.target.id;
-                        if (!chartInstances[canvasId]) {
-                            switch(canvasId) {
-                                case 'adoptionTrendChart': initializeAdoptionChart(entry.target); break;
-                                case 'useCaseChart': initializeUseCaseChart(entry.target); break;
-                                case 'policyStatusChart': initializePolicyChart(entry.target); break;
-                                case 'perceptionGapChart': initializePerceptionChart(entry.target); break;
-                            }
-                        }
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.5 });
-            document.querySelectorAll('canvas').forEach(canvas => chartObserver.observe(canvas));
-
-            // --- Filter Logic ---
             const useCaseFilter = document.getElementById('useCaseFilter');
             if (useCaseFilter) {
                 useCaseFilter.addEventListener('click', (e) => {
@@ -675,7 +876,7 @@
                         e.target.classList.add('active');
 
                         const discipline = e.target.dataset.discipline;
-                        const useCaseChart = chartInstances.useCase;
+                        const useCaseChart = chartInstances.useCaseChart;
                         if (useCaseChart && disciplineData[discipline]) {
                             const chartCanvas = useCaseChart.canvas;
                             chartCanvas.style.transition = 'opacity 0.2s ease-in-out';
@@ -691,7 +892,6 @@
                 });
             }
 
-            // --- Interactive Paradox Logic ---
             const paradoxContainer = document.getElementById('cheating-paradox');
             if (paradoxContainer) {
                 paradoxContainer.querySelectorAll('.vote-btn').forEach(button => {
@@ -727,7 +927,6 @@
                 });
             }
 
-            // --- Bottom Navigation Logic ---
             document.querySelectorAll('.next-section-button').forEach(button => {
                 button.addEventListener('click', (e) => {
                     e.preventDefault();
