@@ -139,6 +139,45 @@
         .next-section-button { background-color: #1a512e; color: white; padding: 0.75rem 1.5rem; border-radius: 9999px; font-weight: 600; transition: background-color 0.3s ease, transform 0.3s ease; display: inline-block; text-decoration: none; }
         .next-section-button:hover { background-color: #2a8a4d; transform: translateY(-2px); }
 
+        /* --- NEW: INTERACTIVE FLIP CARD STYLES --- */
+        .flip-card-container {
+            perspective: 1000px;
+        }
+        .flip-card {
+            position: relative;
+            width: 100%;
+            height: 350px; /* Fixed height for consistency */
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .flip-card.is-flipped {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            border: 1px solid #EAE7E1;
+            border-radius: 0.75rem;
+        }
+        .flip-card-front {
+            background-color: #FFFFFF;
+        }
+        .flip-card-back {
+            background-color: #f3f4f6; /* A slightly different background for the back */
+            transform: rotateY(180deg);
+            overflow-y: auto; /* Allow scrolling for content that overflows */
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
 
         /* --- DARK THEME STYLES --- */
         .dark {
@@ -278,6 +317,15 @@
         .dark .next-section-nav {
             border-top-color: #374151;
         }
+        .dark .flip-card-front {
+            background-color: #1f2937;
+            border-color: #4b5563;
+        }
+        .dark .flip-card-back {
+            background-color: #111827;
+            border-color: #4b5563;
+        }
+
     </style>
 </head>
 <body class="antialiased">
@@ -303,6 +351,7 @@
         
         <main>
             <section id="overview" class="content-section active" role="tabpanel">
+                <!-- Overview Content -->
                  <div class="text-center mb-12">
                     <h2 class="text-2xl md:text-3xl font-bold mb-2">A New Reality: College AI on Campus</h2>
                     <p class="max-w-3xl mx-auto text-gray-600 prose-styles">The year 2025 marks a definitive inflection point in higher education, one driven not by top-down institutional mandate, but by a grassroots technological movement. Generative Artificial Intelligence is no longer an emerging novelty discussed in computer science departments; it has become a foundational, student-led force that is actively and irreversibly reshaping academic practices. From the late-night pressures of study sessions to the final polish of term papers, a dedicated AI assistant has evolved into an indispensable, if controversial, partner in the modern academic journey. This report captures the sheer scale and velocity of this new College AI reality. It illuminates the core friction points between organic student adoption and the lagging pace of institutional adaptation, setting the stage for the critical challenges and opportunities that lie ahead.</p>
@@ -346,6 +395,7 @@
             </section>
             
             <section id="student" class="content-section" role="tabpanel">
+                <!-- Student Experience Content -->
                  <div class="text-center mb-12">
                     <h2 class="text-2xl md:text-3xl font-bold mb-2">The Student Playbook: From Paper AI to Study Buddy</h2>
                     <p class="max-w-3xl mx-auto text-gray-600 prose-styles">To fully comprehend the depth of the College AI shift, it is essential to move beyond aggregate adoption rates and examine the nuanced, sophisticated ways in which students deploy these tools. They are not passive consumers of technology; rather, they are active and strategic users, deploying a versatile AI assistant to augment cognitive weaknesses, accelerate existing strengths, and navigate the intense pressures of modern academic life. Their use cases are diverse and context-dependent, ranging from employing a dedicated Writing AI for grammatical and stylistic editing to leveraging a Paper AI for initial research brainstorming and conceptual outlining. This section dissects the student-developed "playbook" for AI integration.</p>
@@ -473,6 +523,7 @@
             </section>
             
             <section id="institution" class="content-section" role="tabpanel">
+                <!-- Institutional Response Content -->
                 <div class="text-center mb-12">
                     <h2 class="text-2xl md:text-3xl font-bold mb-2">A Landscape of Lag and Disconnection</h2>
                     <p class="max-w-3xl mx-auto text-gray-600 prose-styles">While students have rapidly adopted and integrated AI into their academic lives, the institutional response has been characterized by a significant lag. This slowness is not necessarily born of unwillingness, but rather from the inherent difficulty of adapting established bureaucratic and pedagogical structures to the velocity of technological change. The result is a campus environment defined by a policy vacuum, widespread confusion among faculty and students, and a significant divergence in perception between administrators, who often see the strategic potential of AI, and the faculty who must grapple with its daily classroom implications. This section examines the data behind this growing disconnect.</p>
@@ -522,10 +573,59 @@
 
             <section id="forward" class="content-section" role="tabpanel">
                 <div class="text-center mb-12">
-                     <h2 class="text-2xl md:text-3xl font-bold mb-2">Recommendations and Future Outlook</h2>
-                     <p class="max-w-3xl mx-auto text-gray-600 prose-styles">The data presented in this report necessitates a strategic shift in how higher education approaches generative AI. Moving forward requires institutions and technology partners to transition from a posture of reactive prohibition to one of proactive, principled guidance. The primary objective must be to cultivate deep AI literacy as a core competency for all campus stakeholders. This involves not just understanding how to use the tools, but also how they work, their inherent biases, and their ethical implications. Success will depend on redesigning institutional practices—from academic integrity policies to assessment design—to harness the potential of the modern AI assistant for deeper, more engaged learning rather than viewing it solely as a threat to be mitigated.</p>
+                     <h2 class="text-2xl md:text-3xl font-bold mb-2">Navigating the Future: Recommendations & Outlook</h2>
+                     <p class="max-w-3xl mx-auto text-gray-600 prose-styles">The data in this report necessitates a strategic shift from reactive prohibition to proactive, principled guidance. The primary objective must be to cultivate deep AI literacy as a core competency for all campus stakeholders. This involves understanding not just how to use the tools, but their inherent biases and ethical implications. Success depends on redesigning institutional practices to harness the potential of the modern AI assistant for deeper learning.</p>
                 </div>
                 
+                <div class="bg-white p-6 md:p-8 rounded-xl border border-gray-200 mb-12 animate-on-scroll">
+                    <h3 class="text-xl font-bold text-center">Future Outlook: 2026 and Beyond</h3>
+                    <p class="text-center text-gray-600 text-sm mb-8">The velocity of AI development demands a forward-looking perspective. Click on a card to explore the trends that will define the next wave of educational transformation.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- Card 1: Hyper-Personalized Learning -->
+                        <div class="flip-card-container">
+                            <div class="flip-card">
+                                <div class="flip-card-front">
+                                    <svg class="w-16 h-16 mb-4 text-[#4A7C59] dark:text-emerald-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" /></svg>
+                                    <h4 class="font-bold text-lg text-center">Hyper-Personalized Learning</h4>
+                                </div>
+                                <div class="flip-card-back prose-styles text-sm">
+                                    <h4 class="font-bold !mt-0 !mb-2">The Next Frontier</h4>
+                                    <p>The generic AI assistant of today will evolve into a sophisticated, domain-specific AI tutor that maintains a persistent understanding of a student's individual learning style, knowledge gaps, and academic goals. Curricula will become dynamic, with AI adapting course materials and assessments in real-time to challenge high-achieving students and provide targeted support for those who are struggling.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Re-evaluating Credentials -->
+                        <div class="flip-card-container">
+                            <div class="flip-card">
+                                <div class="flip-card-front">
+                                    <svg class="w-16 h-16 mb-4 text-[#4A7C59] dark:text-emerald-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0l-2.072-1.036A59.924 59.924 0 0012 3.493a59.924 59.924 0 0010.399 5.84l-2.072 1.036m-15.482 0A50.57 50.57 0 0112 13.489a50.57 50.57 0 017.74-3.342M12 13.489v7.415m0 0a48.627 48.627 0 01-8.232-4.41m8.232 4.41A48.627 48.627 0 0020.232 16.5" /></svg>
+                                    <h4 class="font-bold text-lg text-center">Re-evaluating Credentials</h4>
+                                </div>
+                                <div class="flip-card-back prose-styles text-sm">
+                                    <h4 class="font-bold !mt-0 !mb-2">Certifying Human Skills</h4>
+                                    <p>As AI automates more routine cognitive tasks, the value of a degree will be increasingly tied not to knowledge acquired, but to the demonstrated ability to apply it in novel, creative, and collaborative ways. Universities will need to certify uniquely human skills: critical thinking, ethical reasoning, cross-disciplinary synthesis, and, crucially, the ability to work effectively alongside AI.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: The "Centaur" Graduate -->
+                        <div class="flip-card-container">
+                            <div class="flip-card">
+                                <div class="flip-card-front">
+                                    <svg class="w-16 h-16 mb-4 text-[#4A7C59] dark:text-emerald-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 1.5v.75m0 3v.75m0 3v.75m3.03-.63l.53 1.06m-6.12 0l.53-1.06M21 12h-.75m-3 0h-.75m-3 0h-.75m-3 0h-.75m-3 0H3" /></svg>
+                                    <h4 class="font-bold text-lg text-center">The "Centaur" Graduate</h4>
+                                </div>
+                                <div class="flip-card-back prose-styles text-sm">
+                                    <h4 class="font-bold !mt-0 !mb-2">A New Breed of Professional</h4>
+                                    <p>The workforce of the future will demand "Centaur" professionals—a term borrowed from chess, describing human-AI teams that outperform either entity alone. Higher education's primary function may shift to training these graduates, focusing on the meta-skills of prompt engineering, AI output verification, system integration, and ethical oversight. The goal is not to compete with AI, but to collaborate with it masterfully.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 animate-on-scroll">
                     <div class="bg-white p-6 rounded-xl border border-gray-200">
                         <h3 class="text-xl font-bold text-center mb-4">A Roadmap for University Leaders</h3>
@@ -611,6 +711,14 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             
+            // --- NEW: FLIP CARD INTERACTION ---
+            const flipCards = document.querySelectorAll('.flip-card');
+            flipCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('is-flipped');
+                });
+            });
+
             // --- Theme Toggling Logic ---
             const themeToggleButton = document.getElementById('theme-toggle');
             const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
@@ -626,8 +734,6 @@
                     themeToggleLightIcon.classList.add('hidden');
                     themeToggleDarkIcon.classList.remove('hidden');
                 }
-                // We need to re-initialize the charts on theme change to apply colors correctly
-                // A simple update() doesn't always work for all chart options like grid colors.
                 reinitializeAllCharts();
             }
             
@@ -659,17 +765,14 @@
             }
             
             function reinitializeAllCharts() {
-                // Destroy existing charts if they exist
                 Object.values(chartInstances).forEach(chart => {
                     if (chart) chart.destroy();
                 });
 
-                // Clear the instances object
                 for (const key in chartInstances) {
                     delete chartInstances[key];
                 }
 
-                // Re-run the observer on all canvases to re-initialize them
                 document.querySelectorAll('canvas').forEach(canvas => {
                     chartObserver.observe(canvas);
                 });
@@ -677,10 +780,9 @@
 
             Chart.defaults.font.family = 'Inter', 'sans-serif';
 
-            // --- ALL OTHER JS LOGIC (Navigation, Animations, Chart Init, etc.) ---
+            // --- ALL OTHER JS LOGIC ---
             const countUp = (el) => {
                 const target = +el.getAttribute('data-value');
-                // Check if the element is already at the target value to prevent re-running
                 if (parseInt(el.textContent) === target) return; 
                 const duration = 1500;
                 const suffix = el.textContent.includes('%') ? '%' : '';
@@ -712,8 +814,6 @@
                                 }, index * 150);
                             });
                         }
-                        // Don't unobserve, so animations can re-trigger if scrolled out and back in.
-                        // observer.unobserve(entry.target); 
                     }
                 });
             }, { threshold: 0.15 });
@@ -722,7 +822,6 @@
                 animationObserver.observe(el);
             });
             
-            // --- Chart Initialization Functions ---
             const disciplineData = {
                 all: [69, 67, 61, 55, 46], stem: [78, 55, 60, 50, 48],
                 humanities: [58, 75, 65, 62, 45], business: [60, 70, 72, 68, 50],
@@ -823,17 +922,13 @@
                 });
             }, { threshold: 0.5 });
 
-            // Initialize theme and then observe charts
             updateThemeUI();
             
-            // --- Navigation, Accordion, and other interactive elements ---
             const navButtons = document.querySelectorAll('.nav-button');
             const contentSections = document.querySelectorAll('.content-section');
             navButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     const targetId = button.dataset.target;
-                    const targetSection = document.getElementById(targetId);
-                    
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                     
                     navButtons.forEach(btn => {
