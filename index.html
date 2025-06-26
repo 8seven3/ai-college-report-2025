@@ -31,6 +31,17 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
+        /* --- NEW: THEMATIC ANIMATED BACKGROUND CANVAS --- */
+        #background-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none; /* Allows clicks to pass through */
+        }
+
         /* Navigation & Tabs */
         .nav-button {
             transition: all 0.3s ease;
@@ -329,6 +340,8 @@
     </style>
 </head>
 <body class="antialiased">
+
+    <canvas id="background-canvas"></canvas>
 
     <div class="min-h-screen container mx-auto px-4 py-8 md:py-12">
         <header class="relative text-center mb-8 md:mb-12">
@@ -710,6 +723,99 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+
+            // --- ANIMATED PLEXUS BACKGROUND LOGIC ---
+            const canvas = document.getElementById('background-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let animationFrameId;
+
+            function setCanvasSize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            function getThemeColors() {
+                const isDark = document.documentElement.classList.contains('dark');
+                return {
+                    particleColor: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                    lineColor: isDark ? 'rgba(255, 255, 255, 0.25)' : 'rgba(0, 0, 0, 0.15)'
+                };
+            }
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.vx = Math.random() * 0.4 - 0.2;
+                    this.vy = Math.random() * 0.4 - 0.2;
+                    this.radius = Math.random() * 1.5 + 1;
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                }
+
+                draw(colors) {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = colors.particleColor;
+                    ctx.fill();
+                }
+            }
+
+            function initParticles() {
+                particles = [];
+                const numberOfParticles = Math.floor(canvas.width / 25);
+                for (let i = 0; i < numberOfParticles; i++) {
+                    particles.push(new Particle());
+                }
+            }
+
+            function connectParticles(colors) {
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < 120) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = colors.lineColor;
+                            ctx.lineWidth = 0.4;
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function animate() {
+                const colors = getThemeColors();
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw(colors);
+                });
+                connectParticles(colors);
+                animationFrameId = requestAnimationFrame(animate);
+            }
+
+            function startAnimation() {
+                setCanvasSize();
+                initParticles();
+                if (animationFrameId) cancelAnimationFrame(animationFrameId);
+                animate();
+            }
+
+            startAnimation();
+            
+            window.addEventListener('resize', startAnimation);
             
             // --- NEW: FLIP CARD INTERACTION ---
             const flipCards = document.querySelectorAll('.flip-card');
@@ -741,6 +847,7 @@
                 htmlElement.classList.toggle('dark');
                 localStorage.setItem('theme', htmlElement.classList.contains('dark') ? 'dark' : 'light');
                 updateThemeUI();
+                startAnimation();
             });
 
 
